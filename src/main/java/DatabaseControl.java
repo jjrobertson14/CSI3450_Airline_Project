@@ -9,9 +9,13 @@ public class DatabaseControl extends GridPane {
 
     Button populateCustomerButton;
 
+    Button populateAirportButton;
+    
+    Button populateAircraftButton;
+
     Button populateFlightButton;
 
-    Button populateAirportButton;
+    Button populateEmployeeButton;
 
     public DatabaseControl() {
         super();
@@ -19,18 +23,23 @@ public class DatabaseControl extends GridPane {
         executor = new AirlineSQLExecutor();
 
         populateCustomerButton = new Button("Populate Customers");
-        populateFlightButton = new Button("Populate Flights");
         populateAirportButton = new Button("Populate Airports");
+        populateAircraftButton = new Button("Populate Aircraft");
+        populateFlightButton = new Button("Populate Flights");
+        populateEmployeeButton = new Button("Populate Employees");
 
         // insert a group of random customers into the database
-        populateCustomerButton.setOnAction(e ->{
+        populateCustomerButton.setOnAction(e ->     {
             Customer[] c = Customer.generateRandomCustomers();
             executor.insertCustomer(c);
         });
 
+        // position buttons within the gridPane
         this.add(populateCustomerButton, 1, 0);
-        this.add(populateFlightButton, 1, 1);
-        this.add(populateAirportButton, 1, 2);
+        this.add(populateAirportButton, 1, 1);
+        this.add(populateAircraftButton, 1, 2);
+        this.add(populateFlightButton, 1, 3);
+        this.add(populateEmployeeButton, 1, 4);
     }
 
     private void populateCustomers () {
