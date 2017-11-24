@@ -1,5 +1,5 @@
 import java.sql.SQLException;
-
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
@@ -63,9 +63,32 @@ public class AirlineSQLExecutor {
                 statement.setBoolean(5, customer[i].getWheelchair());
                 statement.setBoolean(6, customer[i].getOxygen());
                 
-                if (i < customer.length) {
-                    statement.addBatch();
-                }
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+            closeConnection();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertAirport(Airport ... airport) {
+        final String insertSQL = "INSERT INTO flights.Airport"
+        + "(name, latitude, longitude)"
+        +"VALUES (?,?,?)";
+
+        try {
+            establishConnection();
+            java.sql.PreparedStatement statement = connection.prepareStatement(insertSQL);
+
+            for (int i = 0; i < airport.length; i++) {
+                statement.setString(1, airport[i].getName());
+                statement.setDouble(2, airport[i].getLatitude());
+                statement.setDouble(3, airport[i].getLongitude());
+
+                statement.addBatch();
             }
 
             statement.executeBatch();
