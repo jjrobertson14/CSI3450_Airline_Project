@@ -99,4 +99,34 @@ public class AirlineSQLExecutor {
         }
     }
 
+    public void insertAircraft(Aircraft ... aircraft) {
+        final String insertSQL = "INSERT INTO flights.Aircraft"
+        + "(mileage, routingRange, firstClassSeats, businessSeats, familySeats, "
+        + "premiumSeats, econSeats) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            establishConnection();
+            java.sql.PreparedStatement statement = connection.prepareStatement(insertSQL);
+
+            for (int i = 0; i < aircraft.length; i++) {
+                statement.setDouble(1, aircraft[i].getMileage());
+                statement.setDouble(2, aircraft[i].getRoutingRange());
+                statement.setInt(3, aircraft[i].getFirstClassSeats());
+                statement.setInt(4, aircraft[i].getBusinessSeats());
+                statement.setInt(5, aircraft[i].getFamilySeats());
+                statement.setInt(6, aircraft[i].getPremiumSeats());
+                statement.setInt(7, aircraft[i].getEconSeats());
+
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+            closeConnection();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
