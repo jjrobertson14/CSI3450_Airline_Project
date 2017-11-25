@@ -58,6 +58,11 @@ public class DatabaseControl extends GridPane {
             executor.insertAirport(detroit, chicago, dallas, london);
         });
 
+        populateAircraftButton.setOnAction( e -> {
+            Aircraft[] a = Aircraft.generateRandomAircraft();
+            executor.insertAircraft(a);
+        });
+
         // position buttons within the gridPane
         this.add(populateCustomerButton, 1, 0);
         this.add(populateAirportButton, 1, 1);
