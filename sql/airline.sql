@@ -88,7 +88,7 @@ CREATE TABLE flightAssignment (
 CREATE TABLE employee (
 	empID MEDIUMINT NOT NULL,
     prevFlightID MEDIUMINT NOT NULL,
-    positionName ENUM('Staff','Flight Attendant','Pilot','Mechanic') NOT NULL,
+    positionID ENUM('Staff','Flight Attendant','Pilot','Mechanic') NOT NULL,
     firstName VARCHAR(15) NOT NULL,
     lastName VARCHAR(20) NOT NULL,
     salary FLOAT(10,2) NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE employee (
 
 #create position dress code table
 CREATE TABLE positionDC (
-	positionName ENUM('Staff','Flight Attendant','Pilot','Mechanic') NOT NULL,
+	positionID ENUM('Staff','Flight Attendant','Pilot','Mechanic') NOT NULL,
     dressCode VARCHAR(20) NOT NULL,
     PRIMARY KEY (positionName)
 );
@@ -135,6 +135,5 @@ CREATE TABLE aircraft (
 CREATE TABLE service (
 	aircraftID MEDIUMINT NOT NULL,
     serviceType VARCHAR(20) NOT NULL,
-    servicePrice FLOAT(6,2) NOT NULL,
     PRIMARY KEY (aircraftID, serviceType)
 );
