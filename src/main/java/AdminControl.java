@@ -3,11 +3,11 @@ import javafx.scene.layout.*;
 
 public class AdminControl extends VBox {
 	
-	Button addFlight;
+	private Button addFlight;
 	
-	Button editFlight;
+	private Button editFlight;
 	
-	Button addAirport;
+	private Button addAirport;
 	
 	public AdminControl() {
 		addFlight = new Button("Add Flight");

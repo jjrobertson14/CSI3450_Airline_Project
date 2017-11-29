@@ -8,19 +8,19 @@ import javafx.scene.layout.*;
  */
 public class AirportControl extends GridPane {
 	
-	TextField airportName;
+	private TextField airportName;
 	
-	TextField airportLongitude;
+	private TextField airportLongitude;
 	
-	TextField airportLatitude;
+	private TextField airportLatitude;
 	
-	Button submit;
+	private Button submit;
 	
-	Label nameLabel;
+	private Label nameLabel;
 	
-	Label longitudeLabel;
+	private Label longitudeLabel;
 	
-	Label latitudeLabel;
+	private Label latitudeLabel;
 	
 	public AirportControl() {
 		
