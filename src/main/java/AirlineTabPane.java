@@ -26,6 +26,7 @@ public class AirlineTabPane extends TabPane {
         );
 
         databaseTab.setContent(new DatabaseControl());
+        employeeTab.setContent(new EmployeeControl());
 
         // disallow closing tabs
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
