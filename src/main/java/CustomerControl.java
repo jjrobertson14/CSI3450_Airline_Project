@@ -22,8 +22,10 @@ public class CustomerControl extends VBox {
 	public CustomerControl() {
 		super();
 		
+		// create SQL executor
 		executor = new AirlineSQLExecutor();
 		
+		// load the list of available customers
 		customer = new ComboBox<Customer>();
 		customer.getItems().addAll(executor.getCustomers());
 		
@@ -43,6 +45,13 @@ public class CustomerControl extends VBox {
 				charges,
 				itinerary
 		);
+		
+		customer.setOnAction( e -> {
+			// Load customer-specific data here
+			Customer selectedCustomer = customer.getValue();
+			
+			setMembership.setSelected(selectedCustomer.getIsMember());
+		});
 		
 		scheduleReservation.setOnAction( e -> {
 			ReservationDialog dialog = new ReservationDialog(ReservationDialog.CREATE_RESERVATION);
