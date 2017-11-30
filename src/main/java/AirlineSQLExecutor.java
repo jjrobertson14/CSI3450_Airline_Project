@@ -362,5 +362,46 @@ public class AirlineSQLExecutor {
     	return employees;
     }
     
+    /**
+     * Return a list of pilots at the given airport
+     * @param airport the given airport
+     * @return a list of pilots at the given airport
+     */
+    public ArrayList<Employee> getPilotsAtAirport(Airport airport) {
+    	ArrayList<Employee> employees = new ArrayList<Employee>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Employee WHERE empID in "
+    				+ "(SELECT empID FROM flights.AirportAssignment WHERE airportID="
+    				+ airport.getID() + ") AND positionID in (SELECT positionID from "
+    				+ "flights.EmployeePosition WHERE dressCode='Pilot uniform')";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			employees.add(new Employee(
+    					result.getInt("empID"),
+    					result.getInt("prevFlightID"),
+    					result.getInt("positionID"),
+    					result.getString("firstName"),
+    					result.getString("lastName")
+				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return employees;
+    }
+    
 
 }
