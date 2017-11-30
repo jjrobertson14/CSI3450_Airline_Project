@@ -12,16 +12,20 @@ public class RecordControl extends VBox {
 	
 	private int mode;
 	
+	private Button submit;
+	
 	public RecordControl(int mode) {
 		this.mode = mode;
 		
 		flight = new ComboBox<String>();
 		time = new TextField();
 		time.setText("2017-12-12 8:30:00");
+		submit = new Button("Submit");
 		
 		this.getChildren().addAll(
 				flight,
-				time
+				time,
+				submit
 		);
 	}
 	
