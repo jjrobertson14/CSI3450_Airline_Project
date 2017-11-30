@@ -14,6 +14,9 @@ public class CustomerControl extends VBox {
 	
 	private Text charges;
 	
+	// display information for all flights for this customer that haven't 'arrived' yet
+	private Text itinerary; 
+	
 	public CustomerControl() {
 		super();
 		customer = new ComboBox<Customer>();
@@ -22,13 +25,16 @@ public class CustomerControl extends VBox {
 		setMembership = new CheckBox("Member");
 		charges = new Text();
 		charges.setText("Place Charges Here!\n1. Item 1\n2. Item 2");
+		itinerary = new Text();
+		itinerary.setText("This is the itenerary!\nFlight a) ...\nFlight b) ...");
 		
 		this.getChildren().addAll(
 				customer,
 				scheduleReservation,
 				cancelReservation,
 				setMembership,
-				charges
+				charges,
+				itinerary
 		);
 		
 		scheduleReservation.setOnAction( e -> {
