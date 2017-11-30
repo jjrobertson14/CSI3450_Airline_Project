@@ -170,4 +170,49 @@ public class AirlineSQLExecutor {
     	return customers;
     }
 
+    //• Get all customers who have seats reserved on a given flight.
+    public ArrayList<Customer> getCustomersOnFlight(int flightNo) {
+        ArrayList<Customer> customers = new ArrayList<Customer>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+
+
+            final String query = "SELECT DISTINCT customerID,firstName,lastName,birthDate,member,wheelchair,oxygen FROM ( "
+                         + "SELECT Customer.customerID,Customer.firstName,Customer.lastName,Customer.birthDate,Customer.member,Customer.wheelchair,Customer.oxygen FROM Flight "
+                         + "JOIN Reservation ON Flight.flightID = " + flightNo + " "
+                         + "JOIN Passenger USING (ReservationID) "
+                         + "JOIN Customer USING (customerID)"
+                         + ") AS sub; ";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                customers.add(new Customer(
+                        result.getInt("customerID"),
+                        result.getString("firstName"),
+                        result.getString("lastName"),
+                        result.getDate("birthDate"),
+                        result.getBoolean("member"),
+                        result.getBoolean("wheelchair"),
+                        result.getBoolean("oxygen")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
 }

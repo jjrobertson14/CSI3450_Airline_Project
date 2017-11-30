@@ -1,4 +1,5 @@
 import java.util.Calendar;
+import java.util.ArrayList;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -49,6 +50,17 @@ public class EmployeeControl extends GridPane {
         flightCrewTextField = new TextField("Flight No.");
         airportFlightsTextField = new TextField("Airport No.");
         flightTotalSalesTextField = new TextField("Flight No.");
+
+        //button behavior
+        getCustomersOnFlightButton.setOnAction(e -> {
+            int flightNoParam = Integer.valueOf(flightCustomersTextField.getText());
+            System.out.println("flightNoParam is: " + flightNoParam);
+            ArrayList<Customer> resultList = executor.getCustomersOnFlight(flightNoParam);
+
+            for(Customer curCustomer : resultList) {
+                System.out.println("result : " + curCustomer.getFirstName());
+            }
+        });
 
 
         // position buttons within the gridPane
