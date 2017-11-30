@@ -1,4 +1,4 @@
-use flights; 
+CREATE DATABASE flights; 
 
 CREATE TABLE Customer(
     customerID int primary key auto_increment,
@@ -13,7 +13,8 @@ CREATE TABLE Customer(
 CREATE TABLE Reservation(
     reservationID int primary key auto_increment,
     flightID int not null,
-    cancelled boolean not null
+    cancelled boolean not null,
+    foreign key (flightID) references Flight(flightID)
 );
 
 CREATE TABLE Purchase(
@@ -67,7 +68,7 @@ CREATE TABLE Aircraft(
 
 CREATE TABLE Airport(
     airportID int primary key auto_increment,
-    name varchar(150) not null,
+    airportName varchar(150) not null,
     latitude decimal not null,
     longitude decimal not null
 );
@@ -89,6 +90,18 @@ CREATE TABLE FlightSequence(
     flightID int not null,
     sequenceNum int not null,
     foreign key (reservationID) references Reservation(reservationID),
+    foreign key (flightID) references Flight(flightID)
+);
+
+CREATE TABLE FlightDeparted(
+	flightID int primary key auto_increment,
+    departTime datetime not null,
+    foreign key (flightID) references Flight(flightID)
+);
+
+CREATE TABLE FlightArrived(
+	flightID int primary key auto_increment,
+    arriveTime datetime not null,
     foreign key (flightID) references Flight(flightID)
 );
 
@@ -139,7 +152,7 @@ CREATE TABLE `Service` (
         'wifi',
         'drinks',
         'dining',
-        'power_outlets',
+        'power outlets',
         'snacks',
         'movies'
     ) not null,
