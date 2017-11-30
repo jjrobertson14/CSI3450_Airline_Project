@@ -106,6 +106,13 @@ public class Aircraft {
 	public void setEconSeats(int econSeats) {
 		this.econSeats = econSeats;
     }
+	
+	// TODO: implement this function for use in flight dialogs
+	@Override
+	public String toString() {
+		// place-holder value
+		return "Boeing 747";
+	}
     
     public static Aircraft[] generateRandomAircraft() {
         Aircraft[] aircraft = new Aircraft[10];
