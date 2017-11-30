@@ -10,9 +10,9 @@ public class Flight {
 	
 	private int destAirportID;
 	
-	private Date departureTime;
+	private Timestamp departureTime;
 	
-	private Date arrivalTime;
+	private Timestamp arrivalTime;
 
 	public int getID() {
 		return id;
@@ -46,24 +46,24 @@ public class Flight {
 		this.destAirportID = destAirportID;
 	}
 
-	public Date getDepartureTime() {
+	public Timestamp getDepartureTime() {
 		return departureTime;
 	}
 
-	public void setDepartureTime(Date departureTime) {
+	public void setDepartureTime(Timestamp departureTime) {
 		this.departureTime = departureTime;
 	}
 
-	public Date getArrivalTime() {
+	public Timestamp getArrivalTime() {
 		return arrivalTime;
 	}
 
-	public void setArrivalTime(Date arrivalTime) {
+	public void setArrivalTime(Timestamp arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
 
-	public Flight(int id, int aircraftID, int sourceAirportID, int destAirportID, Date departureTime,
-			Date arrivalTime) {
+	public Flight(int id, int aircraftID, int sourceAirportID, int destAirportID, Timestamp departureTime,
+			Timestamp arrivalTime) {
 		super();
 		this.id = id;
 		this.aircraftID = aircraftID;
@@ -75,6 +75,12 @@ public class Flight {
 	
 	public Flight() {
 		
+	}
+	
+	@Override
+	public String toString() {
+		String res = id + " : " + departureTime + " -> " + arrivalTime;
+		return res;
 	}
 	
 	
