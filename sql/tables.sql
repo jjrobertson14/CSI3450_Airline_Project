@@ -1,5 +1,7 @@
 CREATE DATABASE flights; 
 
+use flights;
+
 CREATE TABLE Customer(
     customerID int primary key auto_increment,
     firstName varchar(100) not null, 
@@ -8,6 +10,41 @@ CREATE TABLE Customer(
     member boolean not null,
     wheelchair boolean not null,
     oxygen boolean not null
+);
+
+CREATE TABLE EmployeePosition(
+    positionID int primary key auto_increment,
+    dressCode varchar(100) not null
+);
+
+CREATE TABLE Airport(
+    airportID int primary key auto_increment,
+    airportName varchar(150) not null,
+    latitude decimal not null,
+    longitude decimal not null
+);
+
+CREATE TABLE Aircraft(
+    aircraftID int primary key auto_increment,
+    mileage decimal not null,
+    routingRange decimal not null,
+    firstClassSeats int not null,
+    businessSeats int not null,
+    familySeats int not null,
+    premiumSeats int not null,
+    econSeats int not null
+);
+
+CREATE TABLE Flight(
+    flightID int primary key auto_increment,
+    aircraftID int not null,
+    sourceAirportID int not null,
+    destAirportID int not null,
+    liftOffTime datetime not null,
+    landTime datetime not null,
+    foreign key (aircraftID) references Aircraft(AircraftID),
+    foreign key (sourceAirportID) references Airport(AirportID),
+    foreign key (destAirportID) references Airport(AirportID)
 );
 
 CREATE TABLE Reservation(
@@ -27,7 +64,7 @@ CREATE TABLE Purchase(
 );
 
 CREATE TABLE Charge(
-    reservationID int not null,
+    reservationID int,
     customerID int not null,
     memberDiscount decimal,
     refund decimal,
@@ -53,36 +90,6 @@ CREATE TABLE Passenger(
     foreign key (reservationID) references Reservation(reservationID),
     foreign key (customerID) references Customer(customerID),
     primary key (reservationID, customerID)
-);
-
-CREATE TABLE Aircraft(
-    aircraftID int primary key auto_increment,
-    mileage decimal not null,
-    routingRange decimal not null,
-    firstClassSeats int not null,
-    businessSeats int not null,
-    familySeats int not null,
-    premiumSeats int not null,
-    econSeats int not null
-);
-
-CREATE TABLE Airport(
-    airportID int primary key auto_increment,
-    airportName varchar(150) not null,
-    latitude decimal not null,
-    longitude decimal not null
-);
-
-CREATE TABLE Flight(
-    flightID int primary key auto_increment,
-    aircraftID int not null,
-    sourceAirportID int not null,
-    destAirportID int not null,
-    liftOffTime datetime not null,
-    landTime datetime not null,
-    foreign key (aircraftID) references Aircraft(AircraftID),
-    foreign key (sourceAirportID) references Airport(AirportID),
-    foreign key (destAirportID) references Airport(AirportID)
 );
 
 CREATE TABLE FlightSequence(
@@ -116,11 +123,6 @@ CREATE TABLE ClassPrices(
     flightID int not null,
     price decimal not null,
     foreign key (flightID) references Flight(flightID)
-);
-
-CREATE TABLE EmployeePosition(
-    positionID int primary key auto_increment,
-    dressCode varchar(100) not null
 );
 
 CREATE TABLE Employee(
