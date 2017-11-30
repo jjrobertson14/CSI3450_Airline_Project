@@ -177,6 +177,17 @@ public class Customer {
     public void setOxygen(boolean oxygen) {
         this.oxygen = oxygen;
     }
+    
+    @Override
+    public String toString() {
+    	String res = firstName + " " + lastName;
+    	
+    	if (isMember) {
+    		res += " : Member";
+    	}
+    	
+    	return res;
+    }
 
     /**
      * Generate 50 random customers, with no customerID
