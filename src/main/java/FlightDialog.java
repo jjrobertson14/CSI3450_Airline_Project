@@ -25,7 +25,7 @@ public class FlightDialog extends Stage {
 			 break;
 		case CANCEL_FLIGHT:
 			this.setTitle("Cancel Flight");
-			scene = new Scene(new CancelFlightControl());
+			scene = new Scene(new CancelReservationControl());
 			break;
 		case DEPARTURE:
 			this.setTitle("Record Flight Departure");
