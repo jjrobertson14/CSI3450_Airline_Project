@@ -4,6 +4,8 @@ import javafx.scene.text.*;
 
 public class CustomerControl extends VBox {
 	
+	private AirlineSQLExecutor executor;
+	
 	private ComboBox<Customer> customer;
 	
 	private Button scheduleReservation;
@@ -19,7 +21,12 @@ public class CustomerControl extends VBox {
 	
 	public CustomerControl() {
 		super();
+		
+		executor = new AirlineSQLExecutor();
+		
 		customer = new ComboBox<Customer>();
+		customer.getItems().addAll(executor.getCustomers());
+		
 		scheduleReservation = new Button("Create a Reservation");
 		cancelReservation = new Button("Cancel a Reservation");
 		setMembership = new CheckBox("Member");

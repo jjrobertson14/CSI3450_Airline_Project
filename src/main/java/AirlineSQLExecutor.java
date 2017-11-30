@@ -1,5 +1,7 @@
 import java.sql.SQLException;
-import com.mysql.jdbc.PreparedStatement;
+import java.util.ArrayList;
+
+import java.sql.*;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
@@ -107,7 +109,7 @@ public class AirlineSQLExecutor {
 
         try {
             establishConnection();
-            java.sql.PreparedStatement statement = connection.prepareStatement(insertSQL);
+            PreparedStatement statement = connection.prepareStatement(insertSQL);
 
             for (int i = 0; i < aircraft.length; i++) {
                 statement.setDouble(1, aircraft[i].getMileage());
@@ -127,6 +129,45 @@ public class AirlineSQLExecutor {
         catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Obtain the list of customers in the database
+     * @return ArrayList of customers in the database
+     */
+    public ArrayList<Customer> getCustomers() {
+    	ArrayList<Customer> customers = new ArrayList<Customer>();
+    	System.out.println("Hit!");
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.CUSTOMER";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			customers.add(new Customer(
+    					result.getInt("customerID"),
+    					result.getString("firstName"),
+    					result.getString("lastName"),
+    					result.getDate("birthDate"),
+    					result.getBoolean("member"),
+    					result.getBoolean("wheelchair"),
+    					result.getBoolean("oxygen")
+				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return customers;
     }
 
 }
