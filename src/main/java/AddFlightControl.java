@@ -3,7 +3,6 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
-//TODO: pilot and crew should eventually be of type X<Employee> instead of X<String>
 
 /**
  * This view is responsible for creating a new flight
@@ -26,7 +25,7 @@ public class AddFlightControl extends GridPane {
 	
 	private ComboBox<String> pilot;
 	
-	private ListView<String> crew;
+	private ListView<Employee> crew;
 	
 	private TextField baseFare;
 	
@@ -81,7 +80,7 @@ public class AddFlightControl extends GridPane {
 		);
 		
 		pilot = new ComboBox<String>(employees);
-		crew = new ListView<String>(employees);
+		crew = new ListView<Employee>();
 		crew.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		
 		// Base fare
@@ -100,6 +99,12 @@ public class AddFlightControl extends GridPane {
 		pilotLabel = new Label("Select Pilot");
 		crewLabel = new Label("Select Crew Members");
 		baseFareLabel = new Label("$ Base Price");
+		
+		// handle events
+		origin.setOnAction( e -> {
+			crew.getItems().clear();
+			crew.getItems().addAll(executor.getEmployeesAtAirport(origin.getValue()));
+		});
 		
 		
 		// arrange UI elements
