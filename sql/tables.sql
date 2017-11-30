@@ -121,10 +121,11 @@ CREATE TABLE ClassPrices(
         'family',
         'premium',
         'economy'
-    ) primary key,
+    ) not null,
     flightID int not null,
     price decimal not null,
-    foreign key (flightID) references Flight(flightID)
+    foreign key (flightID) references Flight(flightID),
+    primary key(class, flightID)
 );
 
 CREATE TABLE Employee(
@@ -145,8 +146,9 @@ CREATE TABLE FlightAssignment(
 );
 
 CREATE TABLE AirportAssignment(
-    airportID int primary key auto_increment,
+    airportID int not null,
     empID int not null,
+    foreign key (airportID) references Airport(airportID),
     foreign key (empID) references Employee(empID)
 );
 
