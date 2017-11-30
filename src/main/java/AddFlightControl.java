@@ -23,7 +23,7 @@ public class AddFlightControl extends GridPane {
 	
 	private TextField arrival;
 	
-	private ComboBox<String> pilot;
+	private ComboBox<Employee> pilot;
 	
 	private ListView<Employee> crew;
 	
@@ -79,7 +79,7 @@ public class AddFlightControl extends GridPane {
 				"Attendant Jose"
 		);
 		
-		pilot = new ComboBox<String>(employees);
+		pilot = new ComboBox<Employee>();
 		crew = new ListView<Employee>();
 		crew.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		
@@ -104,6 +104,9 @@ public class AddFlightControl extends GridPane {
 		origin.setOnAction( e -> {
 			crew.getItems().clear();
 			crew.getItems().addAll(executor.getEmployeesAtAirport(origin.getValue()));
+			
+			pilot.getItems().clear();
+			pilot.getItems().addAll(executor.getPilotsAtAirport(origin.getValue()));
 		});
 		
 		
