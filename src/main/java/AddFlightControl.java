@@ -12,6 +12,8 @@ import javafx.scene.layout.*;
  */
 public class AddFlightControl extends GridPane {
 	
+	AirlineSQLExecutor executor;
+	
 	private ComboBox<Aircraft> aircraft;
 		
 	private ComboBox<Airport> origin;
@@ -47,6 +49,9 @@ public class AddFlightControl extends GridPane {
 	private Label baseFareLabel;
 
 	public AddFlightControl() {
+		
+		// setup SQL executor
+		executor = new AirlineSQLExecutor();
 		
 		// Load aircraft here
 		Aircraft a1 = new Aircraft();
