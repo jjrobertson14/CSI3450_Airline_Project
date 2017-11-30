@@ -24,7 +24,8 @@ public class AirlineTabPane extends TabPane {
             adminTab,
             databaseTab
         );
-
+        
+        customerTab.setContent(new CustomerControl());
         adminTab.setContent(new AdminControl());
         databaseTab.setContent(new DatabaseControl());
 
