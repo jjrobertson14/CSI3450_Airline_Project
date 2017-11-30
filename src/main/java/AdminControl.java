@@ -11,17 +11,25 @@ public class AdminControl extends VBox {
 	
 	private Button addAirport;
 	
+	private Button flightDeparture;
+	
+	private Button flightArrival;
+	
 	public AdminControl() {
 		addFlight = new Button("Add Flight");
 		editFlight = new Button("Edit Flight");
 		cancelFlight = new Button("Cancel Flight");
 		addAirport = new Button("Add Airport");
+		flightDeparture = new Button("Record Flight Departure");
+		flightArrival = new Button("Record Flight Arrival");
 		
 		this.getChildren().addAll(
 				addFlight,
 				editFlight,
 				cancelFlight,
-				addAirport
+				addAirport,
+				flightDeparture,
+				flightArrival
 		);
 		
 		addFlight.setOnAction( e -> {
@@ -41,6 +49,16 @@ public class AdminControl extends VBox {
 		
 		addAirport.setOnAction( e -> {
 			AirportDialog dialog = new AirportDialog();
+			dialog.show();
+		});
+		
+		flightDeparture.setOnAction( e -> {
+			FlightDialog dialog = new FlightDialog(FlightDialog.DEPARTURE);
+			dialog.show();
+		});
+		
+		flightArrival.setOnAction( e -> {
+			FlightDialog dialog = new FlightDialog(FlightDialog.ARRIVAL);
 			dialog.show();
 		});
 	}
