@@ -209,6 +209,10 @@ public class AirlineSQLExecutor {
     	return flights;
     }
     
+    /**
+     * Get all aircraft
+     * @return a list of all aircraft
+     */
     public ArrayList<Aircraft> getAircraft() {
     	ArrayList<Aircraft> aircraft = new ArrayList<Aircraft>();
     	
@@ -245,6 +249,10 @@ public class AirlineSQLExecutor {
     	return aircraft;
     }
     
+    /**
+     * Get all airports
+     * @return a list of all airports
+     */
     public ArrayList<Airport> getAirports() {
     	ArrayList<Airport> airports = new ArrayList<Airport>();
     	
