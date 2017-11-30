@@ -43,7 +43,7 @@ VALUES
 ('Altamira', -3.25, -52.25); 
 
 #populate flights table
-INSERT INTO Flight (aircraftID, sourceAirportID, destAirportID, liftOffTime, landTime)
+INSERT INTO Flight (aircraftID, sourceAirportID, destAirportID, departureTime, arrivalTime)
 VALUES
 (1, 9, 10, '2017-12-01 10:00:00', '2017-12-01 20:00:00'),
 (2, 3, 8, '2017-12-02 08:00:00', '2017-12-02 16:30:00'),

@@ -53,20 +53,16 @@ public class AddFlightControl extends GridPane {
 		// setup SQL executor
 		executor = new AirlineSQLExecutor();
 		
-		// Load aircraft here
-		Aircraft a1 = new Aircraft();
-		a1.setAircraftID(7);
-		a1.setBusinessSeats(50);
+		// Load aircraft here		
+		aircraft = new ComboBox<Aircraft>();
+		aircraft.getItems().addAll(executor.getAircraft());
 		
-		ObservableList<Aircraft> aircraftList = FXCollections.observableArrayList(a1);
+		// Load airports here		
+		origin = new ComboBox<Airport>();
+		destination = new ComboBox<Airport>();
 		
-		aircraft = new ComboBox<Aircraft>(aircraftList);
-		
-		// Load airports here
-		ObservableList<Airport> airportList = FXCollections.observableArrayList();
-		
-		origin = new ComboBox<Airport>(airportList);
-		destination = new ComboBox<Airport>(airportList);
+		origin.getItems().addAll(executor.getAirports());
+		destination.getItems().addAll(executor.getAirports());
 		
 		// departure and arrival
 		departure = new TextField();
