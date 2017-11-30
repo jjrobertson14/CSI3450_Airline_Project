@@ -67,6 +67,8 @@ CREATE TABLE Charge(
     reservationID int,
     customerID int not null,
     memberDiscount decimal,
+    childDiscount decimal,
+    multiWayDiscount decimal,
     refund decimal,
     weightFee decimal,
     insuranceFee decimal,
