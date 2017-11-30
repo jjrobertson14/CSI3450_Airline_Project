@@ -169,5 +169,112 @@ public class AirlineSQLExecutor {
     	
     	return customers;
     }
+    
+    /**
+     * Get a collection of all the flights which are not cancelled and have not yet departed
+     * @return the set of available flights
+     */
+    public ArrayList<Flight> getAvailableFlights() {
+    	ArrayList<Flight> flights = new ArrayList<Flight>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Flight "
+    				+ "WHERE flightID NOT IN ( SELECT flightID FROM flights.FlightDeparted )";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			flights.add(new Flight(
+    					result.getInt("flightID"),
+    					result.getInt("aircraftID"),
+    					result.getInt("sourceAirportID"),
+    					result.getInt("destAirportID"),
+    					result.getTimestamp("departureTime"),
+    					result.getTimestamp("arrivalTime")
+				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return flights;
+    }
+    
+    public ArrayList<Aircraft> getAircraft() {
+    	ArrayList<Aircraft> aircraft = new ArrayList<Aircraft>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Aircraft";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			aircraft.add(new Aircraft(
+    					result.getInt("aircraftID"),
+    					result.getDouble("mileage"),
+    					result.getDouble("routingRange"),
+    					result.getInt("firstClassSeats"),
+    					result.getInt("businessSeats"),
+    					result.getInt("familySeats"),
+    					result.getInt("premiumSeats"),
+    					result.getInt("econSeats")
+    			));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return aircraft;
+    }
+    
+    public ArrayList<Airport> getAirports() {
+    	ArrayList<Airport> airports = new ArrayList<Airport>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Airport";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			airports.add(new Airport(
+    					result.getInt("airportID"),
+    					result.getString("airportName"),
+    					result.getDouble("longitude"),
+    					result.getDouble("latitude")
+    			));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return airports;
+    }
 
 }
