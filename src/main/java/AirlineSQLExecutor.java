@@ -284,5 +284,83 @@ public class AirlineSQLExecutor {
     	
     	return airports;
     }
+    
+    /**
+     * Get a list of all employees
+     * @return a list of all employees
+     */
+    public ArrayList<Employee> getEmployees() {
+    	ArrayList<Employee> employees = new ArrayList<Employee>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Employee";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			employees.add(new Employee(
+    					result.getInt("empID"),
+    					result.getInt("prevFlightID"),
+    					result.getInt("positionID"),
+    					result.getString("firstName"),
+    					result.getString("lastName")
+				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return employees;
+    }
+    
+    /**
+     * Get the employees who are currently working at the given airport
+     * @param airport the given airport
+     * @return a list of assigned employees
+     */
+    public ArrayList<Employee> getEmployeesAtAirport(Airport airport) {
+    	ArrayList<Employee> employees = new ArrayList<Employee>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Employee WHERE empID in "
+    				+ "(SELECT empID FROM flights.AirportAssignment WHERE airportID="
+    				+ airport.getID() + ")";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			employees.add(new Employee(
+    					result.getInt("empID"),
+    					result.getInt("prevFlightID"),
+    					result.getInt("positionID"),
+    					result.getString("firstName"),
+    					result.getString("lastName")
+				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return employees;
+    }
+    
 
 }
