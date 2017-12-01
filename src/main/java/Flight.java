@@ -13,6 +13,8 @@ public class Flight {
 	private Timestamp departureTime;
 	
 	private Timestamp arrivalTime;
+	
+	private boolean cancelled;
 
 	public int getID() {
 		return id;
@@ -62,8 +64,16 @@ public class Flight {
 		this.arrivalTime = arrivalTime;
 	}
 
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+
 	public Flight(int id, int aircraftID, int sourceAirportID, int destAirportID, Timestamp departureTime,
-			Timestamp arrivalTime) {
+			Timestamp arrivalTime, boolean cancelled) {
 		super();
 		this.id = id;
 		this.aircraftID = aircraftID;
@@ -71,10 +81,11 @@ public class Flight {
 		this.destAirportID = destAirportID;
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
+		this.cancelled = cancelled;
 	}
 	
 	public Flight() {
-		
+		cancelled = false;
 	}
 	
 	@Override
