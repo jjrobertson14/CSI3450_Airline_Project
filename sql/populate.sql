@@ -60,10 +60,10 @@ VALUES
 #populate employee position table
 INSERT INTO EmployeePosition (dressCode)
 VALUES
-('Dress shirt, slacks'),
-('Flight attendant uniform'),
-('Pilot uniform'),
-('Mechanic uniform');
+(1, 'Dress shirt, slacks'),
+(2, 'Flight attendant uniform'),
+(3, 'Pilot uniform'),
+(4, 'Mechanic uniform');
 
 #populate employee table
 INSERT INTO Employee (prevFlightID, positionID, firstName, lastName)
@@ -72,12 +72,12 @@ VALUES
 (2, 2, 'Yumi', 'Matsurika'),
 (3, 2, 'Amy', 'Greenfield'),
 (4, 1, 'Sarah', 'Sterling'),
-(5, 1, 'Mark', 'Meadows'),
-(6, 1, 'Gary', 'Romero'),
-(7, 3, 'Adam', 'Mitchell'),
-(8, 3, 'Martha', 'Croswell'),
-(9, 4, 'Steve', 'Gregg'),
-(10, 4, 'Mark', 'Kelly');
+(null, 1, 'Mark', 'Meadows'),
+(null, 1, 'Gary', 'Romero'),
+(null, 3, 'Adam', 'Mitchell'),
+(null, 3, 'Martha', 'Croswell'),
+(null, 4, 'Steve', 'Gregg'),
+(null, 4, 'Mark', 'Kelly');
 
 #populate airport assignment table
 INSERT INTO AirportAssignment (airportID, empID)
