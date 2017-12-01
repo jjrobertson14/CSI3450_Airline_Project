@@ -1,8 +1,15 @@
 import java.util.Calendar;
 import java.util.ArrayList;
 
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+
+/**
+ * This view is the root of the Employee tab
+ * @author John
+ *
+ */
 
 public class EmployeeControl extends GridPane {
 
@@ -60,6 +67,9 @@ public class EmployeeControl extends GridPane {
             for(Customer curCustomer : resultList) {
                 System.out.println("result : " + curCustomer.getFirstName());
             }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, flightNoParam, 0, "Passengers of flight");
+            dialog.show();
         });
 
 
