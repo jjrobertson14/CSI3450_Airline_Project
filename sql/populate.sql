@@ -186,7 +186,7 @@ VALUES
 (3, 'drinks'),
 (4, 'snacks'),
 (5, 'wifi'),
-(6, 'power outlets'),
+(6, 'power_outlets'),
 (7, 'wifi'),
 (8, 'movies'),
 (9, 'snacks'),
