@@ -71,6 +71,18 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, flightNoParam, 0, "Passengers of flight");
             dialog.show();
         });
+        getCrewOfFlightButton.setOnAction(e -> {
+            int flightNoParam = Integer.valueOf(flightCrewTextField.getText());
+            System.out.println("flightNoParam is: " + flightNoParam);
+            ArrayList<Employee> resultList = executor.getCrewOnFlight(flightNoParam);
+
+            for(Employee curEmployee : resultList) {
+                System.out.println("result : " + curEmployee.getFirstName());
+            }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, flightNoParam, 0, "Crew of flight");
+            dialog.show();
+        });
 
 
         // position buttons within the gridPane

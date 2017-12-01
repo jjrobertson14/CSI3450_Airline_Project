@@ -26,6 +26,8 @@ public class EmployeeResultsControl extends GridPane {
 
     private Label passengerListLabel;
 
+    private Label crewListLabel;
+
     public EmployeeResultsControl(ArrayList resultList, int flightNum, int airportNum, String resultMode) {
         super();
         resultListData = resultList;
@@ -38,27 +40,45 @@ public class EmployeeResultsControl extends GridPane {
         switch (resultMode) {
             case "Passengers of flight" :
 
-            // Load passengers here
-            ObservableList<String> observableListView = FXCollections.observableArrayList();
-            fillListView(resultListData, observableListView);
-            resultListView = new ListView<String>(observableListView);
+                // Load passengers here
+                ObservableList<String> observableListView1 = FXCollections.observableArrayList();
+                fillListViewPassengersOfFlight(resultListData, observableListView1);
+                resultListView = new ListView<String>(observableListView1);
 
-            // Create labels
-            passengerListLabel = new Label("Passengers of flight: \n ID, Name, DoB, isMember, needsWheelchair, needsOxygen");
+                // Create labels
+                passengerListLabel = new Label("Passengers of flight: \n ID, Name, DoB, isMember, needsWheelchair, needsOxygen");
 
-            // arrange UI elements
+                // arrange UI elements
 
-            this.add(flightLabel, 0, 0);
-            this.add(passengerListLabel, 0, 1);
-            this.add(resultListView, 0, 2);
-            break;
+                this.add(flightLabel, 0, 0);
+                this.add(passengerListLabel, 0, 1);
+                this.add(resultListView, 0, 2);
+                break;
+
+            case "Crew of flight" :
+                // Load crew members here
+                ObservableList<String> observableListView2 = FXCollections.observableArrayList();
+                fillListViewCrewOfFlight(resultListData, observableListView2);
+                resultListView = new ListView<String>(observableListView2);
+
+                // Create labels
+                crewListLabel = new Label("Crew of flight: \n empID, prevFlightID, positionID, firstName, lastName");
+
+                this.add(flightLabel, 0, 0);
+                this.add(crewListLabel, 0, 1);
+                this.add(resultListView, 0, 2);
+                break;
+
+            case "Flights from airport" :
+                // Load crew members here
+
 
             default :
                 System.out.println("That's not a resultMode value");
         }
     }
 
-    private void fillListView(ArrayList<Customer> customerListData, ObservableList<String> observableListView) {
+    private void fillListViewPassengersOfFlight(ArrayList<Customer> customerListData, ObservableList<String> observableListView) {
         //iterate through each entity of data
         for ( Customer curPassenger : customerListData) {
             String curRow = "";
@@ -71,6 +91,23 @@ public class EmployeeResultsControl extends GridPane {
             curRow += curPassenger.getOxygen();
 
             System.out.println("adding passenger to view: \n" + curRow + "\n");
+
+            observableListView.add(curRow);
+        }
+    }
+
+    private void fillListViewCrewOfFlight(ArrayList<Employee> employeeListData, ObservableList<String> observableListView) {
+        //iterate through each entity of data
+        for ( Employee curEmployee : employeeListData) {
+            String curRow = "";
+            curRow += curEmployee.getID() + " ";
+            curRow += curEmployee.getPrevFlightID() + " ";
+            curRow += curEmployee.getPositionID() + " ";
+            curRow += curEmployee.getFirstName() + " ";
+            curRow += curEmployee.getLastName() + " ";
+            curRow += curEmployee.getDressCode() + " ";
+
+            System.out.println("adding crew member to view: \n" + curRow + "\n");
 
             observableListView.add(curRow);
         }

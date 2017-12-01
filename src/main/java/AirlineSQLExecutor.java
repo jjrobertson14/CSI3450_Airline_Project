@@ -183,11 +183,11 @@ public class AirlineSQLExecutor {
 
 
             final String query = "SELECT DISTINCT customerID,firstName,lastName,birthDate,member,wheelchair,oxygen FROM ( "
-                         + "SELECT Customer.customerID,Customer.firstName,Customer.lastName,Customer.birthDate,Customer.member,Customer.wheelchair,Customer.oxygen FROM Flight "
-                         + "JOIN Reservation ON Flight.flightID = " + flightNo + " "
-                         + "JOIN Passenger USING (ReservationID) "
-                         + "JOIN Customer USING (customerID)"
-                         + ") AS sub; ";
+                    + "SELECT Customer.customerID,Customer.firstName,Customer.lastName,Customer.birthDate,Customer.member,Customer.wheelchair,Customer.oxygen FROM Flight "
+                    + "JOIN Reservation ON Flight.flightID = " + flightNo + " "
+                    + "JOIN Passenger USING (ReservationID) "
+                    + "JOIN Customer USING (customerID)"
+                    + ") AS sub; ";
             System.out.println(query);
 
             Statement statement = connection.createStatement();
@@ -214,5 +214,49 @@ public class AirlineSQLExecutor {
         }
 
         return customers;
+    }
+
+    public ArrayList<Employee> getCrewOnFlight(int flightNo) {
+        ArrayList<Employee> employees = new ArrayList<Employee>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+
+
+            final String query = "SELECT empID,prevFlightID,positionID,firstName,lastName,dressCode FROM (\n"
+                    + "	SELECT FlightAssignment.empID,Employee.prevFlightID,Employee.positionID,Employee.firstName,Employee.lastName,EmployeePosition.dressCode FROM Flight "
+                    + "JOIN FlightAssignment ON Flight.flightID = " + flightNo + " "
+                    + "JOIN Employee USING (empID)"
+                    + "JOIN EmployeePosition USING (positionID)"
+                    + ") AS sub; ";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                employees.add(new Employee(
+                        result.getInt("empID"),
+                        result.getInt("prevFlightID"),
+                        result.getInt("positionID"),
+                        result.getString("firstName"),
+                        result.getString("lastName"),
+                        result.getString("dressCode")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return employees;
     }
 }
