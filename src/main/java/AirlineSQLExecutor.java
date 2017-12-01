@@ -132,6 +132,92 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Insert the given flight into the database. After flight is inserted, it will have its ID updated
+     * to match the auto-allocated ID in the database for future use
+     * @param flight the given flight
+     */
+    public void insertFlight(Flight flight) {
+    	
+    	// Query for inserting into flight table
+    	final String insertSQL = "INSERT INTO flights.Flight " 
+    			+ "(aircraftID, sourceAirportID, destAirportID, departureTime, arrivalTime) "
+    			+ "VALUES (?,?,?,?,?)";
+    	
+    	try {
+    		establishConnection();
+    		
+    		PreparedStatement statement = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
+    		
+    		statement.setInt(1,  flight.getAircraftID());
+    		statement.setInt(2, flight.getSourceAirportID());
+    		statement.setInt(3, flight.getDestAirportID());
+    		statement.setTimestamp(4, flight.getDepartureTime());
+    		statement.setTimestamp(5, flight.getArrivalTime());
+    		
+    		statement.execute();
+    		
+    		ResultSet set = statement.getGeneratedKeys();
+    		
+    		// record the auto-generated id in the flight object
+    		set.next();
+    		int flightKey = set.getInt(1);
+    		flight.setId(flightKey);
+    		
+    		System.out.println("fligthID: " + flightKey);
+    		
+    		closeConnection();
+    	}
+    	catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Record the prices for the different tickets for the given flight
+     * @param flight the given flight
+     * @param classPrice the ticket prices for the given flight
+     */
+    public void insertClassPrice(Flight flight, ClassPrice classPrice) {
+    	// Query for inserting into class Price table
+    	final String insertSQL = "INSERT INTO flights.ClassPrices "
+    			+ "(class, flightID, price) VALUES "
+    			+ "(?,?,?)";
+    	
+    	// Prepare values for insertion into database
+    	final String[] classes = {"first", "business", "family", "premium", "economy"};
+    	
+		Double[] prices = {
+				classPrice.getFirstClass(),
+				classPrice.getBusinessClass(), 
+				classPrice.getFamilyClass(),
+				classPrice.getPremiumClass(),
+				classPrice.getEconClass()
+		};
+		
+		// execute insertion
+		try {
+			establishConnection();
+			
+			PreparedStatement statement = connection.prepareStatement(insertSQL);
+			
+			for (int i = 0; i < classes.length; i++ ) {    			
+    			statement.setString(1, classes[i]);
+    			statement.setInt(2, flight.getID());
+    			statement.setDouble(3, prices[i]);
+    			statement.addBatch();
+    		}
+    		
+    		statement.executeBatch();
+    		statement.close();
+    		
+			closeConnection();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    /**
      * Records that the specified flight left at the specified time
      * @param flight the given flight
      * @param timestamp the time of departure
@@ -233,7 +319,8 @@ public class AirlineSQLExecutor {
     		establishConnection();
     		
     		final String query = "SELECT * FROM flights.Flight "
-    				+ "WHERE flightID NOT IN ( SELECT flightID FROM flights.FlightDeparted )";
+    				+ "WHERE flightID NOT IN ( SELECT flightID FROM flights.FlightDeparted ) "
+    				+ "AND cancelled=false";
     		
     		Statement statement = connection.createStatement();
     		
@@ -246,7 +333,8 @@ public class AirlineSQLExecutor {
     					result.getInt("sourceAirportID"),
     					result.getInt("destAirportID"),
     					result.getTimestamp("departureTime"),
-    					result.getTimestamp("arrivalTime")
+    					result.getTimestamp("arrivalTime"),
+    					result.getBoolean("cancelled")
 				));
     		}
     		
@@ -269,7 +357,8 @@ public class AirlineSQLExecutor {
     		
     		final String query = "SELECT * FROM flights.Flight "
     				+ "WHERE flightID IN ( SELECT flightID FROM flights.FlightDeparted ) "
-    				+ "AND flightID NOT IN ( SELECT flightID FROM flights.FlightArrived)";
+    				+ "AND flightID NOT IN ( SELECT flightID FROM flights.FlightArrived) "
+    				+ "AND cancelled=false";
     		
     		Statement statement = connection.createStatement();
     		
@@ -282,7 +371,8 @@ public class AirlineSQLExecutor {
     					result.getInt("sourceAirportID"),
     					result.getInt("destAirportID"),
     					result.getTimestamp("departureTime"),
-    					result.getTimestamp("arrivalTime")
+    					result.getTimestamp("arrivalTime"),
+    					result.getBoolean("cancelled")
 				));
     		}
     		
@@ -295,6 +385,30 @@ public class AirlineSQLExecutor {
     	}
     	
     	return flights;
+    }
+    
+    /**
+     * Marks the given flight as cancelled
+     * @param flight the flight to be cancelled
+     */
+    public void cancelFlight(Flight flight) {
+    	try {
+    		establishConnection();
+    		
+    		final String update = "UPDATE flights.Flight SET "
+    				+ "cancelled = true WHERE flightID="+flight.getID();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		//TODO: Additional customer logic here
+    		
+    		statement.executeUpdate(update);
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
     }
     
     /**
@@ -527,6 +641,32 @@ public class AirlineSQLExecutor {
     	}
     	
     	return employees;
+    }
+    
+    public void assignEmployeesToFlight(Flight flight, Employee ...employees) {
+    	
+    	final String insertSQL = "INSERT INTO flights.FlightAssignment (flightID, empID) "
+    			+"VALUES (?,?)";
+    	
+    	try {
+    		establishConnection();
+    		
+    		PreparedStatement statement = connection.prepareStatement(insertSQL);
+    		
+    		for (int i = 0; i < employees.length; i++) {
+    			statement.setInt(1, flight.getID());
+    			statement.setInt(2, employees[i].getId());
+    			
+    			statement.addBatch();
+    		}
+    		
+    		statement.executeBatch();
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
     }
     
 
