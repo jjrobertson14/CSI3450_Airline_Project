@@ -216,6 +216,7 @@ public class AirlineSQLExecutor {
         return customers;
     }
 
+    //• Get all the details about the crew members on that flight.
     public ArrayList<Employee> getCrewOnFlight(int flightNo) {
         ArrayList<Employee> employees = new ArrayList<Employee>();
         System.out.println("Hit!");
@@ -259,4 +260,51 @@ public class AirlineSQLExecutor {
 
         return employees;
     }
+
+    //• Get all flights for a given airport.
+    // Assuming that means flights departing from an airport
+    public ArrayList<Flight> getFlightsForAirport(int airportNo) {
+        ArrayList<Flight> flights = new ArrayList<Flight>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+
+
+            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM (\n"
+                    + "	SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM Flight "
+                    + "WHERE Flight.sourceAirportID = " + airportNo + " "
+                    + ") AS sub2\n";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                flights.add(new Flight(
+                        result.getInt("flightID"),
+                        result.getInt("aircraftID"),
+                        result.getInt("sourceAirportID"),
+                        result.getInt("destAirportID"),
+                        result.getString("liftOffTime"),
+                        result.getString("landTime")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flights;
+    }
+
+
+
 }

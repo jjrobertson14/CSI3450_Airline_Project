@@ -83,6 +83,28 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, flightNoParam, 0, "Crew of flight");
             dialog.show();
         });
+        getFlightsForAirportButton.setOnAction(e -> {
+            int airportNoParam = Integer.valueOf(airportFlightsTextField.getText());
+            System.out.println("airportNoParam is: " + airportNoParam);
+            ArrayList<Flight> resultList = executor.getFlightsForAirport(airportNoParam);
+
+            for(Flight curFlight : resultList) {
+                System.out.println("result : " + curFlight.getID());
+            }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, airportNoParam, "Flights from airport");
+            dialog.show();
+        });
+//        viewFlightRosterButton.setOnAction(e -> {
+//            ArrayList<Flight> resultList = executor.getFlightRoster();
+//
+//            for(Flight curFlight : resultList) {
+//                System.out.println("result : " + curFlight.getID());
+//            }
+//
+//            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, airportNoParam, "Flight rooster");
+//            dialog.show();
+//        });
 
 
         // position buttons within the gridPane
