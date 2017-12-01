@@ -78,7 +78,7 @@ public class AirlineSQLExecutor {
 
     public void insertAirport(Airport ... airport) {
         final String insertSQL = "INSERT INTO flights.Airport"
-        + "(name, latitude, longitude)"
+        + "(airportName, latitude, longitude)"
         +"VALUES (?,?,?)";
 
         try {
@@ -132,6 +132,58 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Records that the specified flight left at the specified time
+     * @param flight the given flight
+     * @param timestamp the time of departure
+     */
+    public void insertFlightDeparted(Flight flight, Timestamp timestamp) {
+    	final String insertSQL = "INSERT INTO flights.FlightDeparted "
+    			+ "(flightID, departTime) VALUES (?, ?)";
+    	
+    	try {
+    		establishConnection();
+    		PreparedStatement statement = connection.prepareStatement(insertSQL);
+    		
+    		statement.setInt(1, flight.getID());
+    		statement.setTimestamp(2, timestamp);
+    		
+    		statement.execute();
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Records that the specified flight arrived at the specified time
+     * @param flight the given flight
+     * @param timestamp the time of arrival
+     */
+    public void insertFlightArrived (Flight flight, Timestamp timestamp) {
+    	final String insertSQL = "INSERT INTO flights.FlightArrived "
+    			+ "(flightID, arriveTime) VALUES (?, ?)";
+    	
+    	try {
+    		establishConnection();
+    		PreparedStatement statement = connection.prepareStatement(insertSQL);
+    		
+    		statement.setInt(1, flight.getID());
+    		statement.setTimestamp(2, timestamp);
+    		
+    		statement.execute();
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
      * Obtain the list of customers in the database
      * @return ArrayList of customers in the database
      */
@@ -182,6 +234,42 @@ public class AirlineSQLExecutor {
     		
     		final String query = "SELECT * FROM flights.Flight "
     				+ "WHERE flightID NOT IN ( SELECT flightID FROM flights.FlightDeparted )";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			flights.add(new Flight(
+    					result.getInt("flightID"),
+    					result.getInt("aircraftID"),
+    					result.getInt("sourceAirportID"),
+    					result.getInt("destAirportID"),
+    					result.getTimestamp("departureTime"),
+    					result.getTimestamp("arrivalTime")
+				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return flights;
+    }
+    
+    public ArrayList<Flight> getDepartedFlights() {
+    	ArrayList<Flight> flights = new ArrayList<Flight>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Flight "
+    				+ "WHERE flightID IN ( SELECT flightID FROM flights.FlightDeparted ) "
+    				+ "AND flightID NOT IN ( SELECT flightID FROM flights.FlightArrived)";
     		
     		Statement statement = connection.createStatement();
     		
@@ -390,6 +478,44 @@ public class AirlineSQLExecutor {
     					result.getString("firstName"),
     					result.getString("lastName")
 				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return employees;
+    }
+    
+    
+    /**
+     * Get all employees at the given airport who aren't assigned to a flight
+     * @param airport the given airport
+     * @return all employees at the airport who aren't assigned to a flight
+     */
+    public ArrayList<Employee> getAvailableEmployeesAtAirport(Airport airport, Timestamp timestamp) {
+    	ArrayList<Employee> employees = new ArrayList<Employee>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		// Get all employees at the airport not assigned to a pending flight
+    		final String query = "SELECT * FROM flights.Employee "
+    				+ "WHERE empID NOT IN (SELECT empID FROM flights.FlightAssignment "
+    				+ "WHERE flightID NOT IN (SELECT flightID FROM flights.FlightArrived)) "
+    				+ "AND empID IN (SELECT empID from flights.AirportAssignment "
+    				+ "WHERE airportID=" + airport.getID()+" )";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			
     		}
     		
     		statement.close();
