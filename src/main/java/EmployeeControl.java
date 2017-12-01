@@ -95,16 +95,16 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, 0, airportNoParam, "Flights from airport");
             dialog.show();
         });
-//        viewFlightRosterButton.setOnAction(e -> {
-//            ArrayList<Flight> resultList = executor.getFlightRoster();
-//
-//            for(Flight curFlight : resultList) {
-//                System.out.println("result : " + curFlight.getID());
-//            }
-//
-//            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, airportNoParam, "Flight rooster");
-//            dialog.show();
-//        });
+        viewFlightRosterButton.setOnAction(e -> {
+            ArrayList<Flight> resultList = executor.getFlightRooster();
+
+            for(Flight curFlight : resultList) {
+                System.out.println("result : " + curFlight.getID());
+            }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flight rooster");
+            dialog.show();
+        });
 
 
         // position buttons within the gridPane

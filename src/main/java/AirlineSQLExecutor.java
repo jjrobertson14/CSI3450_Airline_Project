@@ -305,6 +305,50 @@ public class AirlineSQLExecutor {
         return flights;
     }
 
+    // • View flight rooster, schedule.
+    // Assuming that means schedule of all flights (based on the word roster)
+    public ArrayList<Flight> getFlightRooster() {
+        ArrayList<Flight> flights = new ArrayList<Flight>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
 
 
+
+            final String query = "SELECT flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM (\n"
+                    + "	SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM Flight \n"
+                    + " JOIN FlightDeparted USING (flightID) "
+                    + " JOIN FlightArrived USING (flightID) "
+                    + ") AS sub3";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                flights.add(new Flight(
+                        result.getInt("flightID"),
+                        result.getInt("aircraftID"),
+                        result.getInt("sourceAirportID"),
+                        result.getInt("destAirportID"),
+                        result.getString("liftOffTime"),
+                        result.getString("departTime"),
+                        result.getString("landTime"),
+                        result.getString("arriveTime")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flights;
+    }
 }

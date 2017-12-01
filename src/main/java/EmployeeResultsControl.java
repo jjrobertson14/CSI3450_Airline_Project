@@ -24,6 +24,8 @@ public class EmployeeResultsControl extends GridPane {
 
     private Label flightLabel;
 
+    private Label flightRoosterLabel;
+
     private Label airportLabel;
 
     private Label passengerListLabel;
@@ -96,6 +98,12 @@ public class EmployeeResultsControl extends GridPane {
                 ObservableList<String> observableListView4 = FXCollections.observableArrayList();
                 fillListFlightsSchedule(resultListData, observableListView4);
                 resultListView = new ListView<String>(observableListView4);
+
+                //Create labels
+                flightRoosterLabel = new Label ("Flight rooster(roster): \n flightID, aircraftID, sourceAirportID, destAirportID, liftOffTime, departTime, landTime, arriveTime");
+
+                this.add(flightRoosterLabel, 0,0);
+                this.add(resultListView, 0, 1);
 
             default :
                 System.out.println("That's not a resultMode value");
