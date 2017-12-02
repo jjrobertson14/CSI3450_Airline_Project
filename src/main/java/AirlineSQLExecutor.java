@@ -308,6 +308,23 @@ public class AirlineSQLExecutor {
     	return customers;
     }
     
+    public void updateCustomerMembership(int customerID, boolean isMember) {
+    	final String update = "UPDATE flights.Customer SET member=" + isMember + " "
+    			+ "WHERE customerID=" + customerID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		statement.executeUpdate(update);
+    				
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
     /**
      * Get a collection of all the flights which are not cancelled and have not yet departed
      * @return the set of available flights
