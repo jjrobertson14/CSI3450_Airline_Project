@@ -326,6 +326,44 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Return the flight identified by the given ID, or null if there is no such flight
+     * @param flightID the given flight id
+     * @return the flight identified by the given id
+     */
+    public Flight getFlightByID(int flightID) {
+    	Flight flight = null;
+    	
+    	final String query = "SELECT * FROM flights.Flight WHERE "
+    			+ "flightID=" + flightID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		if (result.next()) {
+    			flight = new Flight(
+					result.getInt("flightID"),
+					result.getInt("aircraftID"),
+					result.getInt("sourceAirportID"),
+					result.getInt("destAirportID"),
+					result.getTimestamp("departureTime"),
+					result.getTimestamp("arrivalTime"),
+					result.getBoolean("cancelled")
+				);
+    		}
+    		
+    		closeConnection();
+    	}
+    	catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return flight;
+    }
+    
+    /**
      * Get a collection of all the flights which are not cancelled and have not yet departed
      * @return the set of available flights
      */
@@ -534,8 +572,6 @@ public class AirlineSQLExecutor {
     				+ "cancelled = true WHERE flightID="+ flightID;
     		
     		Statement statement = connection.createStatement();
-    		
-    		//TODO: Additional customer logic here
     		
     		statement.executeUpdate(update);
     		
