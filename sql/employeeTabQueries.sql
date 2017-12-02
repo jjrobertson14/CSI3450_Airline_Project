@@ -27,12 +27,9 @@ USE Flights
 # (also covers "# Get all flights whose arrival and departure times are on time/delayed.", additional things done in view control are the only difference)
 # Note: assuming this means the schedule of all flights
 # TODO: have this return airport names
-#SELECT flightID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM (
 SELECT Flight.flightID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM Flight 
 	JOIN FlightDeparted USING (flightID)
 	JOIN FlightArrived USING (flightID)
-	WHERE flightID = 4 AND liftOffTime > departTime#<flight number to check for>;
-#) AS sub3# WHERE flightID = 4#<flight number to check for>;
 
 # Calculate total sales for a given flight.
 # only the refund sum on the row that is cancelled is subtracted from total sales

@@ -1086,11 +1086,10 @@ public class AirlineSQLExecutor {
 
 
 
-            final String query = "SELECT flightID,aircraftID,sourceAirportID,destAirportID,departureTime,departTime,arrivalTime,arriveTime FROM (\n"
-                    + "	SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight \n"
+            final String query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight \n"
                     + " JOIN FlightDeparted USING (flightID) "
-                    + " JOIN FlightArrived USING (flightID) "
-                    + ") AS sub3";
+                    + " JOIN FlightArrived USING (flightID) ";
+
             System.out.println(query);
 
             Statement statement = connection.createStatement();
