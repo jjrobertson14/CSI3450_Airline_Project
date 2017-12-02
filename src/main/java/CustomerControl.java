@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
@@ -51,6 +53,15 @@ public class CustomerControl extends VBox {
 			Customer selectedCustomer = customer.getValue();
 			
 			setMembership.setSelected(selectedCustomer.getIsMember());
+			
+			String itineraryText = "Scheduled Flights:\n";
+			
+			ArrayList<Flight> customerFlights = executor.getPendingFlights(selectedCustomer.getID());
+			for (Flight f : customerFlights) {
+				itineraryText += f.toString() + "\n";
+			}
+			
+			itinerary.setText(itineraryText);
 		});
 		
 		scheduleReservation.setOnAction( e -> {
