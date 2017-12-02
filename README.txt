@@ -9,9 +9,9 @@ OS:
 Java:
 MySQL:
 --John--
-OS: 
-Java:
-MySQL:
+OS: Mac OSX High Sierra
+Java: Java(TM) SE Runtime Environment (build 1.8.0_131-b11)
+MySQL: mysql-5.7.20-macos10.12-x86_64
 --Brianna--
 OS: Windows 10 Home
 Java: Java SE Development Kit 8 Update 151
