@@ -8,8 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-//TODO: Implement Flight type with the ComboBox 
-
 /**
  * This view allows the user to select and delete a flight
  * @author Noah
