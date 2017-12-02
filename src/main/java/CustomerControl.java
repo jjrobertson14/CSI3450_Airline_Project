@@ -54,12 +54,12 @@ public class CustomerControl extends VBox {
 		});
 		
 		scheduleReservation.setOnAction( e -> {
-			ReservationDialog dialog = new ReservationDialog(ReservationDialog.CREATE_RESERVATION);
+			ReservationDialog dialog = new ReservationDialog(ReservationDialog.CREATE_RESERVATION, customer.getValue());
 			dialog.show();
 		});
 		
 		cancelReservation.setOnAction( e -> {
-			ReservationDialog dialog = new ReservationDialog(ReservationDialog.CANCEL_RESERVATION);
+			ReservationDialog dialog = new ReservationDialog(ReservationDialog.CANCEL_RESERVATION, customer.getValue());
 			dialog.show();
 		});
 	}
