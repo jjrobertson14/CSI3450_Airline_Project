@@ -59,14 +59,14 @@ public class RecordControl extends VBox {
 		if (mode == DEPARTURE_MODE) {
 			flight.getItems().addAll(executor.getAvailableFlights());
 			submit.setOnAction( e -> {
-				executor.insertFlightDeparted(flight.getValue(), timestamp);
+				executor.insertFlightDeparted(flight.getValue().getID(), timestamp);
 				closeDialog();
 			});
 		}
 		else if (mode == ARRIVAL_MODE){
 			flight.getItems().addAll(executor.getDepartedFlights());
 			submit.setOnAction( e -> {
-				executor.insertFlightArrived(flight.getValue(), timestamp);
+				executor.insertFlightArrived(flight.getValue().getID(), timestamp);
 				closeDialog();
 			});
 		}

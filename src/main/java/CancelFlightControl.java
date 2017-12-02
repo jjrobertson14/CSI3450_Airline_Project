@@ -31,7 +31,7 @@ public class CancelFlightControl extends VBox {
 		//cancel button
 		cancel = new Button("Cancel");
 		cancel.setOnAction( e -> {
-			executor.cancelFlight(flight.getValue());
+			executor.cancelFlight(flight.getValue().getID());
 			Stage stage = (Stage) this.getScene().getWindow();
 			stage.close();
 		});

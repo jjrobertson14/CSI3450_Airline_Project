@@ -135,10 +135,10 @@ public class EditFlightControl extends GridPane {
 			// get pilot
 			pilot.getItems().clear();
 			pilot.getItems().addAll(executor.getPilotsAtAirport(f.getSourceAirportID()));
-			pilot.setValue(executor.getPilotOnFlight(f));
+			pilot.setValue(executor.getPilotOnFlight(f.getID()));
 			
 			// get prices
-			ClassPrice prices = executor.getClassPrice(f);
+			ClassPrice prices = executor.getClassPrice(f.getID());
 			firstClassPrice.setText(""+prices.getFirstClass());
 			businessClassPrice.setText(""+prices.getBusinessClass());
 			familyClassPrice.setText(""+prices.getFamilyClass());
@@ -168,15 +168,15 @@ public class EditFlightControl extends GridPane {
 			f.setDepartureTime(departureTime);
 			f.setArrivalTime(arrivalTime);
 			
-			executor.updateFlightSchedule(f);
+			executor.updateFlightSchedule(f.getAircraftID(), departureTime, arrivalTime);
 			
 			// drop all employees from flight
-			executor.dropAllEmployeesFromFlight(f);
+			executor.dropAllEmployeesFromFlight(f.getID());
 			
 			// assign all selected employees to flight
 			Employee[] updatedCrew = crew.getItems().toArray(new Employee[0]);
-			executor.assignEmployeesToFlight(f, updatedCrew);
-			executor.assignEmployeesToFlight(f, pilot.getValue());
+			executor.assignEmployeesToFlight(f.getID(), updatedCrew);
+			executor.assignEmployeesToFlight(f.getID(), pilot.getValue());
 			
 			// drop all class prices from flight
 			executor.dropAllClassPriceFromFlight(f.getID());
@@ -199,7 +199,7 @@ public class EditFlightControl extends GridPane {
 				return;
 			}
 			
-			executor.insertClassPrice(f, price);
+			executor.insertClassPrice(f.getID(), price);
 			
 			// close dialog
 			Stage stage = (Stage) submit.getScene().getWindow();

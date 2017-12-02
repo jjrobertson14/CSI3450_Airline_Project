@@ -177,7 +177,7 @@ public class AirlineSQLExecutor {
      * @param flight the given flight
      * @param classPrice the ticket prices for the given flight
      */
-    public void insertClassPrice(Flight flight, ClassPrice classPrice) {
+    public void insertClassPrice(int flightID, ClassPrice classPrice) {
     	// Query for inserting into class Price table
     	final String insertSQL = "INSERT INTO flights.ClassPrices "
     			+ "(class, flightID, price) VALUES "
@@ -202,7 +202,7 @@ public class AirlineSQLExecutor {
 			
 			for (int i = 0; i < classes.length; i++ ) {    			
     			statement.setString(1, classes[i]);
-    			statement.setInt(2, flight.getID());
+    			statement.setInt(2, flightID);
     			statement.setDouble(3, prices[i]);
     			statement.addBatch();
     		}
@@ -219,10 +219,10 @@ public class AirlineSQLExecutor {
     
     /**
      * Records that the specified flight left at the specified time
-     * @param flight the given flight
+     * @param flightID the given flight ID
      * @param timestamp the time of departure
      */
-    public void insertFlightDeparted(Flight flight, Timestamp timestamp) {
+    public void insertFlightDeparted(int flightID, Timestamp timestamp) {
     	final String insertSQL = "INSERT INTO flights.FlightDeparted "
     			+ "(flightID, departTime) VALUES (?, ?)";
     	
@@ -230,7 +230,7 @@ public class AirlineSQLExecutor {
     		establishConnection();
     		PreparedStatement statement = connection.prepareStatement(insertSQL);
     		
-    		statement.setInt(1, flight.getID());
+    		statement.setInt(1, flightID);
     		statement.setTimestamp(2, timestamp);
     		
     		statement.execute();
@@ -248,7 +248,7 @@ public class AirlineSQLExecutor {
      * @param flight the given flight
      * @param timestamp the time of arrival
      */
-    public void insertFlightArrived (Flight flight, Timestamp timestamp) {
+    public void insertFlightArrived (int flightID, Timestamp timestamp) {
     	final String insertSQL = "INSERT INTO flights.FlightArrived "
     			+ "(flightID, arriveTime) VALUES (?, ?)";
     	
@@ -256,7 +256,7 @@ public class AirlineSQLExecutor {
     		establishConnection();
     		PreparedStatement statement = connection.prepareStatement(insertSQL);
     		
-    		statement.setInt(1, flight.getID());
+    		statement.setInt(1, flightID);
     		statement.setTimestamp(2, timestamp);
     		
     		statement.execute();
@@ -349,6 +349,10 @@ public class AirlineSQLExecutor {
     	return flights;
     }
     
+    /**
+     * Get a list of all flights that have departed, but are not yet landed
+     * @return the set of flights that are currently in transit
+     */
     public ArrayList<Flight> getDepartedFlights() {
     	ArrayList<Flight> flights = new ArrayList<Flight>();
     	
@@ -390,14 +394,16 @@ public class AirlineSQLExecutor {
     
     /**
      * Synchronize the schedule of the given flight
-     * @param flight
+     * @param flight the given flight
+     * @param depart the new departure time
+     * @param arrive the new arrival time
      */
-    public void updateFlightSchedule(Flight flight) {
+    public void updateFlightSchedule(int flightID, Timestamp depart, Timestamp arrive) {
     	
     	final String update = "UPDATE flights.Flight SET "
-    			+ "departureTime=Timestamp('" + flight.getDepartureTime() + "'), "
-    			+ "arrivalTime=Timestamp('" + flight.getArrivalTime() + "') "
-				+ "WHERE flightID=" + flight.getID();
+    			+ "departureTime=Timestamp('" + depart + "'), "
+    			+ "arrivalTime=Timestamp('" + arrive + "') "
+				+ "WHERE flightID=" + flightID;
     	
     	try {
     		establishConnection();
@@ -417,12 +423,12 @@ public class AirlineSQLExecutor {
      * Marks the given flight as cancelled
      * @param flight the flight to be cancelled
      */
-    public void cancelFlight(Flight flight) {
+    public void cancelFlight(int flightID) {
     	try {
     		establishConnection();
     		
     		final String update = "UPDATE flights.Flight SET "
-    				+ "cancelled = true WHERE flightID="+flight.getID();
+    				+ "cancelled = true WHERE flightID="+ flightID;
     		
     		Statement statement = connection.createStatement();
     		
@@ -437,11 +443,16 @@ public class AirlineSQLExecutor {
     	}
     }
     
-    public ClassPrice getClassPrice(Flight flight) {
+    /**
+     * Get the set of prices for each flight class
+     * @param flightID the given flight
+     * @return a PriceClass containing the prices for each class
+     */
+    public ClassPrice getClassPrice(int flightID) {
     	ClassPrice price = null;
     	
     	final String query = "SElECT * FROM flights.ClassPrices WHERE "
-    			+ "flightID="+flight.getID();
+    			+ "flightID="+flightID;
     	
     	try {
     		establishConnection();
@@ -451,7 +462,7 @@ public class AirlineSQLExecutor {
     		ResultSet result = statement.executeQuery(query);
     		
     		price = new ClassPrice();
-    		price.setFlightID(flight.getID());
+    		price.setFlightID(flightID);
     		
     		while(result.next()) {
     			
@@ -639,14 +650,6 @@ public class AirlineSQLExecutor {
     	return employees;
     }
     
-    /**
-     * Return a list of pilots at the given airport
-     * @param airport the given airport
-     * @return a list of pilots at the given airport
-     */
-    public ArrayList<Employee> getPilotsAtAirport(Airport airport) {
-    	return getPilotsAtAirport(airport.getID());
-    }
     
     /**
      * Return a list of pilots at the given Airport
@@ -695,7 +698,7 @@ public class AirlineSQLExecutor {
      * @param airport the given airport
      * @return all employees at the airport who aren't assigned to a flight
      */
-    public ArrayList<Employee> getAvailableEmployeesAtAirport(Airport airport, Timestamp timestamp) {
+    public ArrayList<Employee> getAvailableEmployeesAtAirport(int airportID, Timestamp timestamp) {
     	ArrayList<Employee> employees = new ArrayList<Employee>();
     	
     	try {
@@ -706,7 +709,7 @@ public class AirlineSQLExecutor {
     				+ "WHERE empID NOT IN (SELECT empID FROM flights.FlightAssignment "
     				+ "WHERE flightID NOT IN (SELECT flightID FROM flights.FlightArrived)) "
     				+ "AND empID IN (SELECT empID from flights.AirportAssignment "
-    				+ "WHERE airportID=" + airport.getID()+" )";
+    				+ "WHERE airportID=" + airportID +" )";
     		
     		Statement statement = connection.createStatement();
     		
@@ -727,7 +730,12 @@ public class AirlineSQLExecutor {
     	return employees;
     }
     
-    public void assignEmployeesToFlight(Flight flight, Employee ...employees) {
+    /**
+     * Mark the listed employees as assigned to the given flight
+     * @param flightID the given flight
+     * @param employees the set of employees to assign
+     */
+    public void assignEmployeesToFlight(int flightID, Employee ...employees) {
     	
     	final String insertSQL = "INSERT INTO flights.FlightAssignment (flightID, empID) "
     			+"VALUES (?,?)";
@@ -738,7 +746,7 @@ public class AirlineSQLExecutor {
     		PreparedStatement statement = connection.prepareStatement(insertSQL);
     		
     		for (int i = 0; i < employees.length; i++) {
-    			statement.setInt(1, flight.getID());
+    			statement.setInt(1, flightID);
     			statement.setInt(2, employees[i].getId());
     			
     			statement.addBatch();
@@ -755,7 +763,7 @@ public class AirlineSQLExecutor {
     
     /**
      * Get the set of all employees who are assigned to the given flight
-     * @param flight the given flight
+     * @param flightID the given flight
      * @return all employees who are assigned to the flight
      */
     public ArrayList<Employee> getCrewOnFlight(Flight flight) {
@@ -795,16 +803,16 @@ public class AirlineSQLExecutor {
     
     /**
      * Get the designated pilot for the given flight
-     * @param flight the given flight
+     * @param flightID the given flight
      * @return the designated pilot for the given flight
      */
-    public Employee getPilotOnFlight(Flight flight) {
+    public Employee getPilotOnFlight(int flightID) {
     	
     	Employee pilot = null;
     	
     	final String query = "SELECT * FROM flights.Employee WHERE "
     			+ "positionID=3 AND empID IN (SELECT empID from flights.FlightAssignment "
-    			+ "WHERE flightID="+flight.getID() +")";
+    			+ "WHERE flightID="+flightID +")";
     	
     	try {
     		establishConnection();
@@ -836,12 +844,12 @@ public class AirlineSQLExecutor {
     
     /**
      * Remove all employees who have been previously assigned to the given flight
-     * @param flight the flight from which all assigned employees will be removed
+     * @param flightID the flight from which all assigned employees will be removed
      */
-    public void dropAllEmployeesFromFlight(Flight flight) {
+    public void dropAllEmployeesFromFlight(int flightID) {
     	
     	final String delete = "DELETE FROM flights.FlightAssignment WHERE "
-    			+ "flightID=" + flight.getID();
+    			+ "flightID=" + flightID;
     	
     	try {
     		establishConnection();

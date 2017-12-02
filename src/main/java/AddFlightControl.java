@@ -129,7 +129,7 @@ public class AddFlightControl extends GridPane {
 			pilot.getItems().clear();
 			
 			crew.getItems().addAll(executor.getCrewAtAirport(origin.getValue().getID()));
-			pilot.getItems().addAll(executor.getPilotsAtAirport(origin.getValue()));
+			pilot.getItems().addAll(executor.getPilotsAtAirport(origin.getValue().getID()));
 		});
 		
 		// handle submitting the flight
@@ -182,9 +182,9 @@ public class AddFlightControl extends GridPane {
 			
 			// insert values into database
 			executor.insertFlight(f);
-			executor.insertClassPrice(f, price);
-			executor.assignEmployeesToFlight(f, emps);
-			executor.assignEmployeesToFlight(f, pilot.getValue());
+			executor.insertClassPrice(f.getID(), price);
+			executor.assignEmployeesToFlight(f.getID(), emps);
+			executor.assignEmployeesToFlight(f.getID(), pilot.getValue());
 			
 			Stage stage = (Stage) submit.getParent().getScene().getWindow();
 			stage.close();
