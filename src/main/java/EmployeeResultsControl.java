@@ -4,12 +4,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.ArrayList;
 
-//TODO: load passengerListData into passengerListView,  make column headers, control for this dialog popping up
-
 /**
  * This view will display the results of the actions done on the Employee tab
  * @author John
- *
+ * Date: November 28th, 2017
+ * Location: src/main/java
  */
 public class EmployeeResultsControl extends GridPane {
 //customerID,firstName,lastName,birthDate,member,wheelchair,oxygen
@@ -118,6 +117,12 @@ public class EmployeeResultsControl extends GridPane {
             case "Flights delayed" :
                 // • Get all flights whose arrival and departure times are on time/delayed.
                 // Load flights here
+                ObservableList<String> observableListView6 = FXCollections.observableArrayList();
+                fillListFlightsSchedule(resultListData, observableListView6);
+                resultListView = new ListView<String>(observableListView6);
+
+                this.add(flightsDelayedLabel, 0,0);
+                this.add(resultListView, 0, 1);
                 break;
 
             case "Sales for flight" :

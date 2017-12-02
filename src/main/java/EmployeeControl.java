@@ -8,7 +8,8 @@ import javafx.scene.layout.*;
 /**
  * This view is the root of the Employee tab
  * @author John
- *
+ * Date: November 28th, 2017
+ * Location: src/main/java
  */
 
 public class EmployeeControl extends GridPane {
@@ -113,6 +114,16 @@ public class EmployeeControl extends GridPane {
             }
 
             EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flights on time");
+            dialog.show();
+        });
+        getDelayedFlightsButton.setOnAction(e -> {
+            ArrayList<Flight> resultList = executor.getFlightsOnTimeOrDelayed(false);
+
+            for(Flight curFlight : resultList) {
+                System.out.println("result : " + curFlight.getID());
+            }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flights delayed");
             dialog.show();
         });
 

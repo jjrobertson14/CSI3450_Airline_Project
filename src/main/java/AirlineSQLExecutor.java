@@ -6,6 +6,10 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * Responsible for running SQL queries against the database.
+ * @author John
+ * @author Noah
+ * Date: November 25th, 2017
+ * Location: src/main/java
  */
 public class AirlineSQLExecutor {
 
@@ -1172,5 +1176,49 @@ public class AirlineSQLExecutor {
         }
 
         return flights;
+    }
+
+    // • Calculate total sales for a given flight.
+    //array list will contain the total when it is returned
+    public ArrayList<Integer> getFlight() {
+        ArrayList<Integer> sum = new ArrayList<Integer>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+            final String query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight\n"
+                    + "\tJOIN FlightDeparted USING (flightID)\n"
+                    + "\tJOIN FlightArrived USING (flightID)\n"
+                    + "\tWHERE departTime <= departureTime AND arriveTime <= arrivalTime\n";
+
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            int refundSum, ticketPriceSum, insuranceFeeSum, weightFeeSum, cancelled;
+            result.next();
+            cancelled = result.getInt("cancelled");
+            System.out.println(cancelled);
+            if(cancelled == 1) {
+                refundSum = result.getInt("SUM(refund)");
+            }
+            ticketPriceSum = result.getInt("SUM(ticketPrice)");
+            insuranceFeeSum = result.getInt("SUM(insuranceFee)");
+            weightFeeSum = result.getInt("SUM(weightFee)");
+
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sum;
     }
 }

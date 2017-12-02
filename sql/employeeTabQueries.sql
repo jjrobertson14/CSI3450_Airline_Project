@@ -41,15 +41,15 @@ USE Flights
 #	WHERE departTime <= departureTime AND arriveTime <= arrivalTime
 
 # Get all flights whose arrival and departure times are delayed.
-SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,departureTime,departTime,arrivalTime,arriveTime FROM Flight 
-	JOIN FlightDeparted USING (flightID)
-	JOIN FlightArrived USING (flightID)
-	WHERE departTime > departureTime OR arriveTime > arrivalTime
+#SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,departureTime,departTime,arrivalTime,arriveTime FROM Flight 
+#	JOIN FlightDeparted USING (flightID)
+#	JOIN FlightArrived USING (flightID)
+#	WHERE departTime > departureTime OR arriveTime > arrivalTime
 
 # Calculate total sales for a given flight.
 # only the refund sum on the row that is cancelled is subtracted from total sales
-#SELECT SUM(refund),SUM(ticketPrice),cancelled FROM Flight
-#	JOIN Reservation USING (flightID)
-#	JOIN Charge USING (reservationID)
-#	WHERE flightID = 1#<flight number to check for>;
-#GROUP BY cancelled
+SELECT SUM(refund),SUM(ticketPrice),SUM(insuranceFee),SUM(weightFee),Reservation.cancelled FROM Flight
+	JOIN Reservation USING (flightID)
+	JOIN Charge USING (reservationID)
+	#WHERE flightID = 1#<flight number to check for>;
+GROUP BY Reservation.cancelled;

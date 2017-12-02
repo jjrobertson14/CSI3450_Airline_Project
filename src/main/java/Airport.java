@@ -1,4 +1,9 @@
-
+/**
+ * This class is the java object mapping of Airport entities from the database
+ * @author John
+ * Date: November 29th, 2017
+ * Location: src/main/java
+ */
 public class Airport {
 
     private int id;
