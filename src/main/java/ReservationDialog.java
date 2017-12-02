@@ -18,7 +18,7 @@ public class ReservationDialog extends Stage {
 			break;
 		case CANCEL_RESERVATION:
 			this.setTitle("Cancel a Reservation");
-			scene = new Scene(new CancelReservationControl());
+			scene = new Scene(new CancelReservationControl(currentCustomer));
 			break;
 		}
 		
