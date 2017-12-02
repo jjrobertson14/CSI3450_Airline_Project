@@ -1180,8 +1180,8 @@ public class AirlineSQLExecutor {
 
     // • Calculate total sales for a given flight.
     //array list will contain the total when it is returned
-    public ArrayList<Integer> getFlight() {
-        ArrayList<Integer> sum = new ArrayList<Integer>();
+    public ArrayList<java.math.BigDecimal> getFlightSales(int flightNo) {
+        ArrayList<java.math.BigDecimal> sum = new ArrayList<java.math.BigDecimal>();
         System.out.println("Hit!");
 
         try {
@@ -1189,28 +1189,38 @@ public class AirlineSQLExecutor {
             Statement useFlights = connection.createStatement();
             useFlights.executeQuery("USE Flights;");
 
-            final String query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight\n"
-                    + "\tJOIN FlightDeparted USING (flightID)\n"
-                    + "\tJOIN FlightArrived USING (flightID)\n"
-                    + "\tWHERE departTime <= departureTime AND arriveTime <= arrivalTime\n";
+            final String query = "SELECT SUM(refund),SUM(ticketPrice),SUM(insuranceFee),SUM(weightFee),Reservation.cancelled FROM Flight\n"
+                    + "\tJOIN Reservation USING (flightID)\n"
+                    + "\tJOIN Charge USING (reservationID)\n"
+                    + "\tWHERE flightID = " + flightNo + "\n"
+                    + "GROUP BY Reservation.cancelled;";
 
             System.out.println(query);
 
             Statement statement = connection.createStatement();
 
+            //contains row for cancelled charges and row for non-cancelled charges
             ResultSet result = statement.executeQuery(query);
 
-            int refundSum, ticketPriceSum, insuranceFeeSum, weightFeeSum, cancelled;
-            result.next();
-            cancelled = result.getInt("cancelled");
-            System.out.println(cancelled);
-            if(cancelled == 1) {
-                refundSum = result.getInt("SUM(refund)");
-            }
-            ticketPriceSum = result.getInt("SUM(ticketPrice)");
-            insuranceFeeSum = result.getInt("SUM(insuranceFee)");
-            weightFeeSum = result.getInt("SUM(weightFee)");
+            java.math.BigDecimal refundSum = new java.math.BigDecimal(0);
+            java.math.BigDecimal ticketPriceSum =  new java.math.BigDecimal(0);
+            java.math.BigDecimal insuranceFeeSum = new java.math.BigDecimal(0);
+            java.math.BigDecimal weightFeeSum = new java.math.BigDecimal(0);
+            int cancelled = 0;
 
+            //iterates either once or twice depending on whether any reservations on the flight have been cancelled
+            while(result.next()) {
+                cancelled = result.getInt("cancelled");
+                if (cancelled == 1) {
+                    refundSum = refundSum.add(result.getBigDecimal("SUM(refund)"));
+                }
+                ticketPriceSum = ticketPriceSum.add(result.getBigDecimal("SUM(ticketPrice)"));
+                insuranceFeeSum = insuranceFeeSum.add(result.getBigDecimal("SUM(insuranceFee)"));
+                weightFeeSum = weightFeeSum.add(result.getBigDecimal("SUM(weightFee)"));
+            }
+
+            java.math.BigDecimal sumSingle = refundSum.negate().add(ticketPriceSum).add(insuranceFeeSum).add(weightFeeSum);
+            sum.add(sumSingle);
 
             statement.close();
 

@@ -51,5 +51,6 @@ USE Flights
 SELECT SUM(refund),SUM(ticketPrice),SUM(insuranceFee),SUM(weightFee),Reservation.cancelled FROM Flight
 	JOIN Reservation USING (flightID)
 	JOIN Charge USING (reservationID)
-	#WHERE flightID = 1#<flight number to check for>;
+	WHERE flightID = 2#<flight number to check for>;
 GROUP BY Reservation.cancelled;
+

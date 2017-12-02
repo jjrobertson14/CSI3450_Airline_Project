@@ -126,6 +126,14 @@ public class EmployeeResultsControl extends GridPane {
                 break;
 
             case "Sales for flight" :
+                // • Calculate total sales for a given flight.
+                // Load total here
+                ObservableList<String> observableListView7 = FXCollections.observableArrayList();
+                loadTotalSales(resultListData, observableListView7);
+                resultListView = new ListView<String>(observableListView7);
+
+                this.add(flightLabel, 0, 0);
+                this.add(resultListView, 0, 1);
                 break;
 
             default :
@@ -207,6 +215,12 @@ public class EmployeeResultsControl extends GridPane {
             System.out.println("adding flight to view: \n" + curRow + "\n");
 
             observableListView.add(curRow);
+        }
+    }
+
+    private void loadTotalSales(ArrayList<java.math.BigDecimal> sum, ObservableList<String> observableListView) {
+        for (java.math.BigDecimal sumVal : sum) {
+            observableListView.add(sumVal.toString());
         }
     }
 
