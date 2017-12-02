@@ -156,8 +156,8 @@ public class EmployeeResultsControl extends GridPane {
             curRow += curFlight.getAircraftID() + " ";
             curRow += curFlight.getSourceAirportID() + " ";
             curRow += curFlight.getDestAirportID() + " ";
-            curRow += curFlight.getLiftOffTime() + " ";
-            curRow += curFlight.getLandTime();
+            curRow += curFlight.getDepartureTime() + " ";
+            curRow += curFlight.getArrivalTime();
 
             System.out.println("adding flight to view: \n" + curRow + "\n");
 
@@ -174,10 +174,10 @@ public class EmployeeResultsControl extends GridPane {
             curRow += curFlight.getAircraftID() + " ";
             curRow += curFlight.getSourceAirportID() + " ";
             curRow += curFlight.getDestAirportID() + " ";
-            curRow += curFlight.getLiftOffTime() + " ";
-            curRow += curFlight.getDepartTime() + " ";
-            curRow += curFlight.getLandTime();
-            curRow += curFlight.getArriveTime();
+            curRow += curFlight.getDepartureTime() + " ";
+            curRow += curFlight.getArrivalTime() + " ";
+            curRow += curFlight.getRecordedDepartureTime();
+            curRow += curFlight.getRecordedArrivalTime();
 
             System.out.println("adding flight to view: \n" + curRow + "\n");
 

@@ -40,7 +40,7 @@ public class Employee {
 		this.dressCode = dressCode;
 	}
 
-	public int getId() {
+	public int getID() {
 		return id;
 	}
 

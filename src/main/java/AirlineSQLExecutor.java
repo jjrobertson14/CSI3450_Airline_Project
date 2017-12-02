@@ -747,7 +747,7 @@ public class AirlineSQLExecutor {
     		
     		for (int i = 0; i < employees.length; i++) {
     			statement.setInt(1, flightID);
-    			statement.setInt(2, employees[i].getId());
+    			statement.setInt(2, employees[i].getID());
     			
     			statement.addBatch();
     		}
@@ -992,7 +992,7 @@ public class AirlineSQLExecutor {
 
 
 
-            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM (\n"
+            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,departureTime,arrivalTime FROM (\n"
                     + "	SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM Flight "
                     + "WHERE Flight.sourceAirportID = " + airportNo + " "
                     + ") AS sub2\n";
@@ -1008,8 +1008,9 @@ public class AirlineSQLExecutor {
                         result.getInt("aircraftID"),
                         result.getInt("sourceAirportID"),
                         result.getInt("destAirportID"),
-                        result.getString("liftOffTime"),
-                        result.getString("landTime")
+                        result.getTimestamp("liftOffTime"),
+                        result.getTimestamp("landTime"),
+                        false
                 ));
             }
 
@@ -1053,10 +1054,11 @@ public class AirlineSQLExecutor {
                         result.getInt("aircraftID"),
                         result.getInt("sourceAirportID"),
                         result.getInt("destAirportID"),
-                        result.getString("liftOffTime"),
-                        result.getString("departTime"),
-                        result.getString("landTime"),
-                        result.getString("arriveTime")
+                        result.getTimestamp("liftOffTime"),
+                        result.getTimestamp("departTime"),
+                        result.getTimestamp("landTime"),
+                        result.getTimestamp("arriveTime"),
+                        false
                 ));
             }
 
