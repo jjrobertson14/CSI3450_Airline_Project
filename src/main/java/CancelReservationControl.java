@@ -1,3 +1,7 @@
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javafx.collections.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
@@ -27,18 +31,43 @@ public class CancelReservationControl extends VBox {
 		executor = new AirlineSQLExecutor();
 		
 		reservation = new ComboBox<Reservation>();
-		cancellationDate = new TextField("2017-12-04");
+		cancellationDate = new TextField("2017-12-04 12:00:00");
 		cancel = new Button("Cancel");
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		
 		// load reservations
 		reservation.getItems().addAll(executor.getPendingReservations(currentCustomer.getID()));
 		
 		cancel.setOnAction( e -> {
+			// get the reservation
 			Reservation res = reservation.getValue();
 			
+			// cancel reservation and drop customers
 			executor.cancelReservation(res.getID());
 			executor.dropPassengersOnReservation(res.getID());
-			executor.updateCancelledReservationCharges(res.getID(), .300);
+			
+			// determine fees
+			double feePercentage = .10;
+			
+			Flight resFlight = executor.getFlightByID(res.getFlightID());
+			Timestamp depart = resFlight.getDepartureTime();
+			Timestamp cancelTime = null;
+			
+			try {
+				cancelTime = new Timestamp(sdf.parse(cancellationDate.getText()).getTime());
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+				return;
+			}
+			
+			if (depart.getTime() - cancelTime.getTime() < 10 * 60 * 60 * 1000 ) {
+				feePercentage = .33;
+				System.out.println("Cancelled within 10 hours -> 33% fee");
+			}
+			
+						
+			executor.updateCancelledReservationCharges(res.getID(), feePercentage);
 			
 			Stage stage = (Stage) this.getScene().getWindow();
 			stage.close();
