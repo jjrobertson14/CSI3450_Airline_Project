@@ -15,6 +15,10 @@ USE Flights
 #	JOIN EmployeePosition USING (positionID)
 #) AS sub1
 
+
+#departure time is scheduled departure time
+#depart time is recorded depart time
+
 # Get all flights for a given airport.
 #SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime,departTime,arriveTime FROM (
 #	SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime,departTime,arriveTime FROM Flight 
@@ -24,12 +28,23 @@ USE Flights
 #) AS sub2
 
 # View flight rooster, schedule. 
-# (also covers "# Get all flights whose arrival and departure times are on time/delayed.", additional things done in view control are the only difference)
 # Note: assuming this means the schedule of all flights
 # TODO: have this return airport names
-SELECT Flight.flightID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM Flight 
+#SELECT Flight.flightID,sourceAirportID,destAirportID,departureTime,departTime,arrivalTime,arriveTime FROM Flight 
+#	JOIN FlightDeparted USING (flightID)
+#	JOIN FlightArrived USING (flightID)
+
+# Get all flights whose arrival and departure times are on time.
+SELECT Flight.flightID,sourceAirportID,destAirportID,departureTime,departTime,arrivalTime,arriveTime FROM Flight 
 	JOIN FlightDeparted USING (flightID)
 	JOIN FlightArrived USING (flightID)
+	WHERE departTime <= departureTime AND arriveTime <= arrivalTime
+
+# Get all flights whose arrival and departure times are delayed.
+#SELECT Flight.flightID,sourceAirportID,destAirportID,departureTime,departTime,arrivalTime,arriveTime FROM Flight 
+#	JOIN FlightDeparted USING (flightID)
+#	JOIN FlightArrived USING (flightID)
+#	WHERE departTime > departureTime OR arriveTime > arrivalTime
 
 # Calculate total sales for a given flight.
 # only the refund sum on the row that is cancelled is subtracted from total sales

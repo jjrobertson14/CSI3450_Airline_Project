@@ -274,6 +274,7 @@ VALUES
 (2, Date('2017-12-02 16:35:00')),
 (3, Date('2017-12-03 06:57:11')),
 (4, Date('2017-12-04 011:50:11'));
+(5, Date('2017-12-05 14:00:00'));
 
 #populate class prices table
 INSERT INTO ClassPrices (class, flightID, price)
