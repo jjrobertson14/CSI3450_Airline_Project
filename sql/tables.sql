@@ -56,12 +56,13 @@ CREATE TABLE Reservation(
 );
 
 CREATE TABLE Purchase(
-    reservationID int not null primary key,
+    reservationID int not null,
     customerID int not null,
     paymentMethod enum ('debit', 'credit'),
     paymentDate date,
     foreign key (reservationID) references Reservation(reservationID),
-    foreign key (customerID) references Customer(customerID)
+    foreign key (customerID) references Customer(customerID),
+    primary key (reservationID, customerID)
 );
 
 CREATE TABLE Charge(
@@ -73,6 +74,7 @@ CREATE TABLE Charge(
     refund decimal,
     weightFee decimal,
     insuranceFee decimal,
+    cancellationFee decimal,
     ticketPrice decimal not null,
     foreign key (reservationID) references Reservation(reservationID),
     foreign key (customerID) references Customer(customerID),
