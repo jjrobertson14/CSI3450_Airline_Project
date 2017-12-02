@@ -1,4 +1,9 @@
 
+/**
+ * This class is the java object mapping of Employee entities from the database
+ * @author John
+ * @author Noah
+ */
 public class Employee {
 
 	private int id;
@@ -10,19 +15,42 @@ public class Employee {
 	private String firstName;
 	
 	private String lastName;
+  
+  private String dressCode;
 	
 	public Employee() {
 		
 	}
 
-	public Employee(int id, int prevFlightID, int positionID, String firstName, String lastName) {
-		super();
-		this.id = id;
-		this.prevFlightID = prevFlightID;
-		this.positionID = positionID;
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
+	public Employee(
+            int id,
+            int prevFlightID,
+            int positionID,
+            String firstName,
+            String lastName
+    ) {
+        this.id = id;
+        this.prevFlightID = prevFlightID;
+        this.positionID = positionID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+  }
+  
+  public Employee(
+            int id,
+            int prevFlightID,
+            int positionID,
+            String firstName,
+            String lastName,
+            String dressCode
+    ) {
+        this.id = id;
+        this.prevFlightID = prevFlightID;
+        this.positionID = positionID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dressCode = dressCode;
+  }
 
 	public int getId() {
 		return id;
@@ -63,6 +91,14 @@ public class Employee {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+  
+  public String getDressCode() {
+    return this.dressCode;
+  }
+  
+  public void setDressCode(String dressCode) {
+    this.dressCode = dressCode;
+  }
 	
 	@Override
 	public String toString() {
@@ -88,6 +124,5 @@ public class Employee {
 		
 		return e.id == this.id;
 	}
-	
 	
 }

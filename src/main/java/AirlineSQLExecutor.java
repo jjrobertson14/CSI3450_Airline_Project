@@ -888,4 +888,185 @@ public class AirlineSQLExecutor {
     }
     
 
+    //• Get all customers who have seats reserved on a given flight.
+    public ArrayList<Customer> getCustomersOnFlight(int flightNo) {
+        ArrayList<Customer> customers = new ArrayList<Customer>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+
+
+            final String query = "SELECT DISTINCT customerID,firstName,lastName,birthDate,member,wheelchair,oxygen FROM ( "
+                    + "SELECT Customer.customerID,Customer.firstName,Customer.lastName,Customer.birthDate,Customer.member,Customer.wheelchair,Customer.oxygen FROM Flight "
+                    + "JOIN Reservation ON Flight.flightID = " + flightNo + " "
+                    + "JOIN Passenger USING (ReservationID) "
+                    + "JOIN Customer USING (customerID)"
+                    + ") AS sub; ";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                customers.add(new Customer(
+                        result.getInt("customerID"),
+                        result.getString("firstName"),
+                        result.getString("lastName"),
+                        result.getDate("birthDate"),
+                        result.getBoolean("member"),
+                        result.getBoolean("wheelchair"),
+                        result.getBoolean("oxygen")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
+
+    // Get all the details about the crew members on that flight.
+    public ArrayList<Employee> getEmployeesOnFlight(int flightNo) {
+        ArrayList<Employee> employees = new ArrayList<Employee>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+
+
+            final String query = "SELECT empID,prevFlightID,positionID,firstName,lastName,dressCode FROM (\n"
+                    + "	SELECT FlightAssignment.empID,Employee.prevFlightID,Employee.positionID,Employee.firstName,Employee.lastName,EmployeePosition.dressCode FROM Flight "
+                    + "JOIN FlightAssignment ON Flight.flightID = " + flightNo + " "
+                    + "JOIN Employee USING (empID)"
+                    + "JOIN EmployeePosition USING (positionID)"
+                    + ") AS sub; ";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                employees.add(new Employee(
+                        result.getInt("empID"),
+                        result.getInt("prevFlightID"),
+                        result.getInt("positionID"),
+                        result.getString("firstName"),
+                        result.getString("lastName"),
+                        result.getString("dressCode")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return employees;
+    }
+
+    //• Get all flights for a given airport.
+    // Assuming that means flights departing from an airport
+    public ArrayList<Flight> getFlightsForAirport(int airportNo) {
+        ArrayList<Flight> flights = new ArrayList<Flight>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+
+
+            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM (\n"
+                    + "	SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM Flight "
+                    + "WHERE Flight.sourceAirportID = " + airportNo + " "
+                    + ") AS sub2\n";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                flights.add(new Flight(
+                        result.getInt("flightID"),
+                        result.getInt("aircraftID"),
+                        result.getInt("sourceAirportID"),
+                        result.getInt("destAirportID"),
+                        result.getString("liftOffTime"),
+                        result.getString("landTime")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flights;
+    }
+
+    // • View flight rooster, schedule.
+    // Assuming that means schedule of all flights (based on the word roster)
+    public ArrayList<Flight> getFlightRooster() {
+        ArrayList<Flight> flights = new ArrayList<Flight>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+
+
+            final String query = "SELECT flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM (\n"
+                    + "	SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM Flight \n"
+                    + " JOIN FlightDeparted USING (flightID) "
+                    + " JOIN FlightArrived USING (flightID) "
+                    + ") AS sub3";
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                flights.add(new Flight(
+                        result.getInt("flightID"),
+                        result.getInt("aircraftID"),
+                        result.getInt("sourceAirportID"),
+                        result.getInt("destAirportID"),
+                        result.getString("liftOffTime"),
+                        result.getString("departTime"),
+                        result.getString("landTime"),
+                        result.getString("arriveTime")
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flights;
+    }
 }
