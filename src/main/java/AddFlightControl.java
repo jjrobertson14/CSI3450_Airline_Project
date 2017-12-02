@@ -92,15 +92,7 @@ public class AddFlightControl extends GridPane {
 		departure.setText("2017-12-10 8:00");
 		arrival.setText("2017-12-10 12:00");
 		
-		// Load employees here
-		ObservableList<String> employees = FXCollections.observableArrayList(
-				"Pilot Bob",
-				"Attendant John",
-				"Attendant Jane",
-				"Pilot Francine",
-				"Attendant Jose"
-		);
-		
+		// Setup employee selection
 		pilot = new ComboBox<Employee>();
 		crew = new ListView<Employee>();
 		crew.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -136,7 +128,7 @@ public class AddFlightControl extends GridPane {
 			crew.getItems().clear();
 			pilot.getItems().clear();
 			
-			crew.getItems().addAll(executor.getEmployeesAtAirport(origin.getValue()));
+			crew.getItems().addAll(executor.getCrewAtAirport(origin.getValue().getID()));
 			pilot.getItems().addAll(executor.getPilotsAtAirport(origin.getValue()));
 		});
 		
