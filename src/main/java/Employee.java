@@ -68,4 +68,26 @@ public class Employee {
 	public String toString() {
 		return firstName + " " + lastName;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		
+		if (o == this) {
+			return true;
+		}
+		
+		if (o == null) {
+			return false;
+		}
+		
+		if (this.getClass() != o.getClass()) {
+			return false;
+		}
+		
+		Employee e = (Employee) o;
+		
+		return e.id == this.id;
+	}
+	
+	
 }
