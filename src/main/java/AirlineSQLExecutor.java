@@ -1162,4 +1162,143 @@ public class AirlineSQLExecutor {
 
         return flights;
     }
+    
+    /**
+     * Enter a reservation for the given flight
+     * @param flightID the flight to make a reservation for
+     * @return the ID number for the new reservation
+     */
+    public int insertReservation(int flightID) {
+    	int reservationID = 0;
+    	
+    	final String insert = "INSERT INTO flights.reservation (flightID, cancelled) VALUES "
+    			+ "(?,?)";
+    	
+    	try {
+    		establishConnection();
+    		
+    		PreparedStatement statement = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+    		statement.setInt(1, flightID);
+    		statement.setBoolean(2, false);
+    		
+    		statement.execute();
+    		
+    		ResultSet keys = statement.getGeneratedKeys();
+    		
+    		keys.next();
+    		reservationID = keys.getInt(1);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	
+    	return reservationID;
+    }
+    /**
+     * Insert records for which customers are passengers for a given reservation.
+     * @param reservationID the reservation the customers are associated with
+     * @param seatClass the class of seats on the reservation
+     * @param weight the weight carried by each passenger
+     * @param customers the set of customers who will be passengers for the reservation
+     */
+    public void insertPassengers(int reservationID, String seatClass, double weight, Customer ... customers) {
+    	
+    	final String insert = "INSERT INTO flights.Passenger (reservationID, customerID, carryWeight, class) "
+    			+ "VALUES (?,?,?,?)";
+    	
+    	try {
+    		establishConnection();
+    		
+    		PreparedStatement statement = connection.prepareStatement(insert);
+    		
+    		for (int i = 0; i < customers.length; i++) {
+    			statement.setInt(1, reservationID);
+    			statement.setInt(2, customers[i].getID());
+    			statement.setDouble(3, weight);
+    			statement.setString(4, seatClass);
+    			
+    			statement.addBatch();
+    		}
+    		
+    		statement.executeBatch();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    }
+    
+    /**
+     * Insert an array of purchase items into the Purchase table
+     * @param purchases the array of purchases to insert
+     */
+    public void insertPurchase(Purchase ...purchases) {
+    	final String insert = "INSERT INTO flights.Purchase (reservationID, customerID, paymentMethod, paymentDate) "
+    			+ "VALUES (?,?,?,?)";
+    	
+    	try {
+    		establishConnection();
+    		
+    		PreparedStatement statement = connection.prepareStatement(insert);
+    		
+    		for (int i = 0; i < purchases.length; i++) {
+    			Purchase p = purchases[i];
+    			statement.setInt(1, p.getReservationID());
+    			statement.setInt(2,  p.getCustomerID());
+    			statement.setString(3, p.getPaymentMethod());
+    			statement.setDate(4, p.getDate());
+    			
+    			statement.addBatch();
+    		}
+    		
+    		statement.executeBatch();
+    		statement.close();    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void insertCharge(Charge...charges) {
+    	
+    	final String insert = "INSERT INTO flights.Charge (reservationID, customerID, memberDiscount, "
+    			+ "childDiscount, multiWayDiscount, refund, weightFee, insuranceFee, cancellationFee, ticketPrice) VALUES "
+    			+ "(?,?,?,?,?,?,?,?,?,?)";
+    	
+    	try {
+    		establishConnection();
+    		
+    		PreparedStatement statement = connection.prepareStatement(insert);
+    		
+    		for (int i = 0; i < charges.length; i++ ) {
+    			Charge c = charges[i];
+    			statement.setInt(1, c.getReservationID());
+    			statement.setInt(2, c.getCustomerID());
+    			statement.setDouble(3, c.getMemberDiscount());
+    			statement.setDouble(4, c.getChildDiscount());
+    			statement.setDouble(5, c.getMultiwayDiscount());
+    			statement.setDouble(6, c.getRefund());
+    			statement.setDouble(7, c.getWeightFee());
+    			statement.setDouble(8, c.getInsuranceFee());
+    			statement.setDouble(9, c.getCancellationFee());
+    			statement.setDouble(10, c.getTicketPrice());
+    			
+    			statement.addBatch();
+    		}
+    		
+    		statement.executeBatch();
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    }
 }
