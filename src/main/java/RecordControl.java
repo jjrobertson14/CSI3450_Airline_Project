@@ -67,6 +67,8 @@ public class RecordControl extends VBox {
 			flight.getItems().addAll(executor.getDepartedFlights());
 			submit.setOnAction( e -> {
 				executor.insertFlightArrived(flight.getValue().getID(), timestamp);
+				executor.updateEmployeesToAirport(flight.getValue().getID(), flight.getValue().getDestAirportID());
+				executor.updatePrevFlightID(flight.getValue().getID());
 				closeDialog();
 			});
 		}

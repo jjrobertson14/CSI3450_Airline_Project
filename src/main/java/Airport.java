@@ -59,7 +59,7 @@ public class Airport {
     
     @Override
     public String toString() {
-    	return name + " (" + longitude + ", " + latitude + ")";
+    	return id + ": " + name + " (" + longitude + ", " + latitude + ")";
     }
 
 }

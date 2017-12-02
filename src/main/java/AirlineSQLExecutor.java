@@ -731,6 +731,53 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Assign all the employees associated with the given flightID to the given airport
+     * @param flightID the ID of the flight employees are associated with
+     * @param airportID the ID of the airport employees should be reassigned to
+     */
+    public void updateEmployeesToAirport(int flightID, int airportID) {
+    	final String update = "UPDATE flights.airportassignment SET airportID =" + airportID + " "
+    			+ "WHERE empID IN (SELECT empID FROM flights.flightassignment WHERE flightID=" + flightID + ")";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(update);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Set the given flightID as the prevFlightID for all employees associated with this flight
+     * @param flightID the given flight
+     */
+    public void updatePrevFlightID(int flightID) {
+    	final String update = "UPDATE flights.Employee SET prevFlightID=" + flightID + " "
+    			+ "WHERE empID IN (SELECT empID FROM flights.flightassignment WHERE flightID="+ flightID +")";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(update);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
      * Mark the listed employees as assigned to the given flight
      * @param flightID the given flight
      * @param employees the set of employees to assign

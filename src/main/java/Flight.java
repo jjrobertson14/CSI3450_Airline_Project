@@ -130,7 +130,8 @@ public class Flight {
 
 	@Override
 	public String toString() {
-		String res = id + " : " + departureTime + " -> " + arrivalTime;
+		String res = id + " : " + sourceAirportID +": " + departureTime + " -> "
+	                 + destAirportID +": " + arrivalTime;
 		return res;
 	}
 }
