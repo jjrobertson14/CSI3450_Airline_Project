@@ -28,6 +28,7 @@ public class CreateReservationControl extends GridPane {
 		
 		// instantiate UI elements
 		passengers = new ListView<Customer>();
+		passengers.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		passengerClass = new ComboBox<String>();
 		populateFlights = new Button("Populate Applicable Flights");
 		flights = new ListView<Flight>();
@@ -42,17 +43,21 @@ public class CreateReservationControl extends GridPane {
 		
 		// populate class dropdown
 		passengerClass.getItems().addAll(
-				"First Class",
-				"Business Class",
-				"Family Class",
-				"Premium Class",
-				"Economy Class"
+				"first",
+				"business",
+				"family",
+				"premium",
+				"economy"
 		);
 		
 		// handle populate flights press
 		populateFlights.setOnAction( e -> {
-			flights.getItems().clear();
-			flights.getItems().addAll(executor.getAvailableFlights());
+			flights.getItems().clear();		
+			
+			String ticketClass = passengerClass.getValue();
+			int seats = passengers.getSelectionModel().getSelectedItems().size();
+			
+			flights.getItems().addAll(executor.getAvailableFlights(ticketClass, seats));
 		});
 		
 		
