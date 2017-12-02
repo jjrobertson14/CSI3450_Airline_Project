@@ -766,12 +766,12 @@ public class AirlineSQLExecutor {
      * @param flightID the given flight
      * @return all employees who are assigned to the flight
      */
-    public ArrayList<Employee> getCrewOnFlight(Flight flight) {
+    public ArrayList<Employee> getCrewOnFlight(int flightID) {
     	ArrayList<Employee> employees = new ArrayList<Employee>();
     	
     	final String query = "SELECT * FROM flights.Employee WHERE "
     			+ "empID IN (SELECT empID FROM flights.FlightAssignment "
-    			+ "WHERE flightID=" + flight.getID() + ") "
+    			+ "WHERE flightID=" + flightID + ") "
 				+ "AND positionID <> 3";
     	
     	try {

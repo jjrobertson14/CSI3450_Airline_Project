@@ -114,7 +114,7 @@ public class EditFlightControl extends GridPane {
 			arrival.setText(formatter.format(f.getArrivalTime()));
 			
 			// get crew
-			ArrayList<Employee> assignedEmployees = executor.getCrewOnFlight(f);
+			ArrayList<Employee> assignedEmployees = executor.getCrewOnFlight(f.getID());
 			crew.getItems().clear();
 			crew.getItems().addAll(assignedEmployees);
 			
