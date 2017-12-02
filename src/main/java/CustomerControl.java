@@ -101,6 +101,13 @@ public class CustomerControl extends VBox {
 			itinerary.setText(itineraryText);
 		});
 		
+		setMembership.setOnAction(e -> {
+			Customer selectedCustomer = customer.getValue();
+			boolean value = setMembership.isSelected();
+			selectedCustomer.setIsMember(value);
+			executor.updateCustomerMembership(selectedCustomer.getID(), value);
+		});
+		
 		scheduleReservation.setOnAction( e -> {
 			ReservationDialog dialog = new ReservationDialog(ReservationDialog.CREATE_RESERVATION, customer.getValue());
 			dialog.show();
