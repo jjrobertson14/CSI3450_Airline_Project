@@ -40,9 +40,8 @@ CREATE TABLE Flight(
     aircraftID int not null,
     sourceAirportID int not null,
     destAirportID int not null,
-    departureTime datetime not null,
-    arrivalTime datetime not null,
-    cancelled boolean not null default false,
+    liftOffTime datetime not null,
+    landTime datetime not null,
     foreign key (aircraftID) references Aircraft(AircraftID),
     foreign key (sourceAirportID) references Airport(AirportID),
     foreign key (destAirportID) references Airport(AirportID)

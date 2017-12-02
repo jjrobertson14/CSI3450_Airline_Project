@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class Aircraft {
     
-	private int id;
+	private int aircraftID;
 
 	private double mileage;
 
@@ -33,7 +33,7 @@ public class Aircraft {
         int econSeats
     ) {
         super();
-        this.id = aircraftID;
+        this.aircraftID = aircraftID;
         this.mileage = mileage;
         this.routingRange = routingRange;
         this.firstClassSeats = firstClassSeats;
@@ -43,12 +43,12 @@ public class Aircraft {
         this.econSeats = econSeats;
     }
 
-	public int getID() {
-		return id;
+	public int getAircraftID() {
+		return aircraftID;
 	}
 
-	public void setID(int aircraftID) {
-		this.id = aircraftID;
+	public void setAircraftID(int aircraftID) {
+		this.aircraftID = aircraftID;
 	}
 
 	public double getMileage() {
@@ -110,8 +110,8 @@ public class Aircraft {
 	// TODO: implement this function for use in flight dialogs
 	@Override
 	public String toString() {
-		return id + " : " + "fc." + firstClassSeats + " bs." + businessSeats + " fm." + familySeats
-				+ " pm." + premiumSeats + " ec." + econSeats + " : " + mileage + " miles";
+		// place-holder value
+		return "Boeing 747";
 	}
     
     public static Aircraft[] generateRandomAircraft() {

@@ -1,6 +1,5 @@
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
 /**
  * The UI Dialog for creating a new Airport in the "Admin" tab
@@ -8,8 +7,6 @@ import javafx.stage.Stage;
  *
  */
 public class AirportControl extends GridPane {
-	
-	AirlineSQLExecutor executor;
 	
 	private TextField airportName;
 	
@@ -27,8 +24,6 @@ public class AirportControl extends GridPane {
 	
 	public AirportControl() {
 		
-		executor = new AirlineSQLExecutor();
-		
 		// create text fields
 		airportName = new TextField();
 		airportLongitude = new TextField();
@@ -41,27 +36,6 @@ public class AirportControl extends GridPane {
 		nameLabel = new Label("Airport Name");
 		longitudeLabel = new Label("Longitude");
 		latitudeLabel = new Label("Latitude");
-		
-		// handle clicking the submit button
-		submit.setOnAction( e -> {
-			
-			// parse longitude and latitude from their respective text fields
-			double longitude = Double.parseDouble(airportLongitude.getText());
-			double latitude = Double.parseDouble(airportLatitude.getText());
-			
-			// Construct an airport from the given parameters
-			Airport a = new Airport();
-			a.setName(airportName.getText());
-			a.setLongitude(longitude);
-			a.setLatitude(latitude);
-			
-			// insert into database
-			executor.insertAirport(a);
-			
-			// exit the dialog
-			Stage stage = (Stage) submit.getParent().getScene().getWindow();
-			stage.close();
-		});
 		
 		this.add(airportName, 1, 0);
 		this.add(airportLongitude, 1, 1);

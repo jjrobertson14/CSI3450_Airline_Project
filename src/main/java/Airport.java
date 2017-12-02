@@ -1,7 +1,7 @@
 
 public class Airport {
 
-    private int id;
+    private int airportID;
 
     private String name;
 
@@ -19,14 +19,14 @@ public class Airport {
         double latitude,
         double longitude
     ) {
-        this.id = airportID;
+        this.airportID = airportID;
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public int getID() {
-        return this.id;
+    public int getAirportID() {
+        return this.airportID;
     }
 
     public String getName() {
@@ -41,8 +41,8 @@ public class Airport {
         return this.longitude;
     }
 
-    public void setID(int airportID) {
-        this.id = airportID;
+    public void setAirportID(int airportID) {
+        this.airportID = airportID;
     }
 
     public void setName(String name) {
@@ -55,11 +55,6 @@ public class Airport {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-    
-    @Override
-    public String toString() {
-    	return name + " (" + longitude + ", " + latitude + ")";
     }
 
 }

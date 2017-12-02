@@ -13,25 +13,27 @@ import javafx.stage.*;
  */
 public class CancelFlightControl extends VBox {
 	
-	private AirlineSQLExecutor executor;
-	
-	private ComboBox<Flight> flight;
+	private ComboBox<String> flight;
 	
 	private Button cancel;
 	
 	public CancelFlightControl() {
 		super();
 		
-		executor = new AirlineSQLExecutor();
+		// Load flights
+		ObservableList<String> flights = FXCollections.observableArrayList(
+			"Flight 1: Los Angeles -> Detroit",
+			"Flight 2: New York -> London",
+			"Flight 3: San Jose -> Mexico City"
+		);
 		
-		// Load flights		
-		flight = new ComboBox<Flight>();
-		flight.getItems().addAll(executor.getAvailableFlights());
+		flight = new ComboBox<String>(flights);
 		
 		//cancel button
 		cancel = new Button("Cancel");
 		cancel.setOnAction( e -> {
-			executor.cancelFlight(flight.getValue().getID());
+			// TODO: Deletion logic here
+			
 			Stage stage = (Stage) this.getScene().getWindow();
 			stage.close();
 		});
