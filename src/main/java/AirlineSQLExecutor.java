@@ -1387,6 +1387,79 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Get all the purchases associated with the given customerID 
+     * @param customerID the given customer ID
+     * @return the list of purchases
+     */
+    public ArrayList<Purchase> getPurchases(int customerID) {
+    	
+    	ArrayList<Purchase> purchases = new ArrayList<Purchase>();
+    	
+    	final String query = "SELECT * FROM flights.Purchase WHERE "
+    			+ "customerID="+customerID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			purchases.add(new Purchase(
+    					result.getInt("reservationID"),
+    					result.getInt("customerID"),
+    					result.getString("paymentMethod"),
+    					result.getDate("paymentDate")
+				));
+    		}
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return purchases;
+    	
+    }
+    
+    public ArrayList<Charge> getCharges(int reservationID) {
+    	ArrayList<Charge> charges = new ArrayList<Charge>();
+    	
+    	final String query = "SELECT * from flights.Charge WHERE "
+    			+ "reservationID="+reservationID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			charges.add(new Charge(
+    				result.getInt("reservationID"),
+    				result.getInt("customerID"),
+    				result.getDouble("memberDiscount"),
+    				result.getDouble("childDiscount"),
+    				result.getDouble("multiwayDiscount"),
+    				result.getDouble("refund"),
+    				result.getDouble("weightFee"),
+    				result.getDouble("insuranceFee"),
+    				result.getDouble("cancellationFee"),
+    				result.getDouble("ticketPrice")
+				));
+    		}
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return charges;
+    }
+    
+    /**
      * Cancel the reservation corresponding to the given ID
      * @param reservationID the ID number of the reservation to cancel
      */
