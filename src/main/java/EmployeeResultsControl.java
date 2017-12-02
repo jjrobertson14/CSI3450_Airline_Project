@@ -39,10 +39,14 @@ public class EmployeeResultsControl extends GridPane {
         resultListData = resultList;
         flightNo = flightNum;
         airportNo = airportNum;
+
+        // Create labels
         flightLabel = new Label("Selected Flight: " + flightNo);
         airportLabel = new Label("Selected airport: " + airportNum);
-
-
+        passengerListLabel = new Label("Passengers of flight: \n ID, Name, DoB, isMember, needsWheelchair, needsOxygen");
+        crewListLabel = new Label("Crew of flight: \n empID, prevFlightID, positionID, firstName, lastName");
+        flightListLabel = new Label("Flights from airport: \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, arrivalTime, recordedDepartureTime, recordedArrivalTime");
+        flightRoosterLabel = new Label ("Flight rooster(roster): \n flightID, aircraftID, sourceAirportID, destAirportID, liftOffTime, departTime, landTime, arriveTime");
 
         switch (resultMode) {
             case "Passengers of flight" :
@@ -51,9 +55,6 @@ public class EmployeeResultsControl extends GridPane {
                 ObservableList<String> observableListView1 = FXCollections.observableArrayList();
                 fillListViewPassengersOfFlight(resultListData, observableListView1);
                 resultListView = new ListView<String>(observableListView1);
-
-                // Create labels
-                passengerListLabel = new Label("Passengers of flight: \n ID, Name, DoB, isMember, needsWheelchair, needsOxygen");
 
                 // arrange UI elements
 
@@ -69,9 +70,6 @@ public class EmployeeResultsControl extends GridPane {
                 fillListViewCrewOfFlight(resultListData, observableListView2);
                 resultListView = new ListView<String>(observableListView2);
 
-                // Create labels
-                crewListLabel = new Label("Crew of flight: \n empID, prevFlightID, positionID, firstName, lastName");
-
                 this.add(flightLabel, 0, 0);
                 this.add(crewListLabel, 0, 1);
                 this.add(resultListView, 0, 2);
@@ -84,9 +82,6 @@ public class EmployeeResultsControl extends GridPane {
                 fillListFlights(resultListData, observableListView3);
                 resultListView = new ListView<String>(observableListView3);
 
-                // Create labels
-                flightListLabel = new Label("Flights from airport: \n flightID, aircraftID, sourceAirportID, destAirportID, liftOffTime, landTime");
-
                 this.add(airportLabel, 0, 0);
                 this.add(flightListLabel, 0, 1);
                 this.add(resultListView, 0, 2);
@@ -98,9 +93,6 @@ public class EmployeeResultsControl extends GridPane {
                 ObservableList<String> observableListView4 = FXCollections.observableArrayList();
                 fillListFlightsSchedule(resultListData, observableListView4);
                 resultListView = new ListView<String>(observableListView4);
-
-                //Create labels
-                flightRoosterLabel = new Label ("Flight rooster(roster): \n flightID, aircraftID, sourceAirportID, destAirportID, liftOffTime, departTime, landTime, arriveTime");
 
                 this.add(flightRoosterLabel, 0,0);
                 this.add(resultListView, 0, 1);
@@ -156,8 +148,10 @@ public class EmployeeResultsControl extends GridPane {
             curRow += curFlight.getAircraftID() + " ";
             curRow += curFlight.getSourceAirportID() + " ";
             curRow += curFlight.getDestAirportID() + " ";
-            curRow += curFlight.getLiftOffTime() + " ";
-            curRow += curFlight.getLandTime();
+            curRow += curFlight.getDepartureTime() + " ";
+            curRow += curFlight.getArrivalTime() + " ";
+            curRow += curFlight.getRecordedDepartureTime();
+            curRow += curFlight.getRecordedArrivalTime();
 
             System.out.println("adding flight to view: \n" + curRow + "\n");
 
@@ -174,10 +168,10 @@ public class EmployeeResultsControl extends GridPane {
             curRow += curFlight.getAircraftID() + " ";
             curRow += curFlight.getSourceAirportID() + " ";
             curRow += curFlight.getDestAirportID() + " ";
-            curRow += curFlight.getLiftOffTime() + " ";
-            curRow += curFlight.getDepartTime() + " ";
-            curRow += curFlight.getLandTime();
-            curRow += curFlight.getArriveTime();
+            curRow += curFlight.getDepartureTime() + " ";
+            curRow += curFlight.getArrivalTime() + " ";
+            curRow += curFlight.getRecordedDepartureTime();
+            curRow += curFlight.getRecordedArrivalTime();
 
             System.out.println("adding flight to view: \n" + curRow + "\n");
 

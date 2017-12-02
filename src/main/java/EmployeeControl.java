@@ -74,7 +74,7 @@ public class EmployeeControl extends GridPane {
         getCrewOfFlightButton.setOnAction(e -> {
             int flightNoParam = Integer.valueOf(flightCrewTextField.getText());
             System.out.println("flightNoParam is: " + flightNoParam);
-            ArrayList<Employee> resultList = executor.getCrewOnFlight(flightNoParam);
+            ArrayList<Employee> resultList = executor.getEmployeesOnFlight(flightNoParam);
 
             for(Employee curEmployee : resultList) {
                 System.out.println("result : " + curEmployee.getFirstName());
