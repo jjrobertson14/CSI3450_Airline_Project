@@ -58,7 +58,7 @@ VALUES
 
 
 #populate employee position table
-INSERT INTO EmployeePosition (dressCode)
+INSERT INTO EmployeePosition (positionID, dressCode)
 VALUES
 (1, 'Dress shirt, slacks'),
 (2, 'Flight attendant uniform'),
