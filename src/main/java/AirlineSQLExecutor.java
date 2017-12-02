@@ -1301,4 +1301,119 @@ public class AirlineSQLExecutor {
     	}
     	
     }
+    
+    
+    /**
+     * Fetch all pending reservations for the given customer. A reservation is 
+     * "pending" if the corresponding flight has not yet departed
+     * @param customerID the ID of the given customer
+     * @return a list of all pending reservations
+     */
+    public ArrayList<Reservation> getPendingReservations(int customerID) {
+    	ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+    	
+    	final String query = "SELECT * FROM flights.reservation WHERE reservationID IN "
+    			+ "(SELECT reservationID from flights.Purchase WHERE customerID=" + customerID + ") "
+				+ "AND flightID NOT IN (SELECT flightID from flights.FlightDeparted) "
+				+ "AND cancelled=false";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			reservations.add(
+    				new Reservation(
+    						result.getInt("reservationID"),
+    						result.getInt("flightID"),
+    						false
+					)
+				);
+    		}
+    		
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return reservations;
+    }
+    
+    /**
+     * Cancel the reservation corresponding to the given ID
+     * @param reservationID the ID number of the reservation to cancel
+     */
+    public void cancelReservation(int reservationID) {
+    	
+    	final String cancel = "UPDATE flights.Reservation SET "
+    			+ "cancelled=true WHERE reservationID="+reservationID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(cancel);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    }
+    
+    /**
+     * Drop all passengers from the Passenger table associated with the given reservation
+     * @param reservationID the ID of the given reservation
+     */
+    public void dropPassengersOnReservation(int reservationID) {
+    	
+    	final String delete = "DELETE FROM flights.Passenger WHERE reservationID="+reservationID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(delete);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    }
+    
+    public void updateCancelledReservationCharges(int reservationID, double cancellationFee) {
+    	
+    	final String update = "UPDATE flights.Charge SET "
+    			+ "refund=ticketPrice + insuranceFee + weightFee - memberDiscount - childDiscount "
+    			+ "- multiwayDiscount, cancellationFee=" + cancellationFee +" "
+				+ "WHERE reservationID=" + reservationID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(update);
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	
+    }
+    
 }
