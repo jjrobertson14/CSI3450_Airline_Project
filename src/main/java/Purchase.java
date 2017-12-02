@@ -53,5 +53,10 @@ public class Purchase {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	@Override
+	public String toString() {
+		return "Purchase for Reservation " + reservationID + " On " + date + " : " + paymentMethod;
+	}
 
 }
