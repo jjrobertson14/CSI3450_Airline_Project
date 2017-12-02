@@ -158,10 +158,9 @@ CREATE TABLE `Service` (
         'wifi',
         'drinks',
         'dining',
-        'power outlets',
+        'power_outlets',
         'snacks',
         'movies'
     ) not null,
     foreign key (aircraftID) references Aircraft(aircraftID)
 );
-
