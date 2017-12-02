@@ -1039,8 +1039,8 @@ public class AirlineSQLExecutor {
 
 
 
-            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime,departTime,arriveTime FROM (\n"
-                    + "\tSELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime,departTime,arriveTime FROM Flight\n "
+            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,departureTime,arrivalTime,departTime,arriveTime FROM (\n"
+                    + "\tSELECT flightID,aircraftID,destAirportID,sourceAirportID,Flight.departureTime,Flight.arrivalTime,FlightDeparted.departTime,FlightArrived.arriveTime FROM Flight\n "
                     + "\tJOIN FlightDeparted USING (flightID)\n"
 					+ "\tJOIN FlightArrived USING (flightID)\n"
                     + "\tWHERE Flight.sourceAirportID = 9 #<airport number to check for>\n"
@@ -1057,8 +1057,8 @@ public class AirlineSQLExecutor {
                         result.getInt("aircraftID"),
                         result.getInt("sourceAirportID"),
                         result.getInt("destAirportID"),
-                        result.getTimestamp("liftOffTime"),
-                        result.getTimestamp("landTime"),
+                        result.getTimestamp("departureTime"),
+                        result.getTimestamp("arrivalTime"),
                         false
                 ));
             }
@@ -1086,8 +1086,8 @@ public class AirlineSQLExecutor {
 
 
 
-            final String query = "SELECT flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM (\n"
-                    + "	SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM Flight \n"
+            final String query = "SELECT flightID,aircraftID,sourceAirportID,destAirportID,departureTime,departTime,arrivalTime,arriveTime FROM (\n"
+                    + "	SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight \n"
                     + " JOIN FlightDeparted USING (flightID) "
                     + " JOIN FlightArrived USING (flightID) "
                     + ") AS sub3";
@@ -1103,9 +1103,9 @@ public class AirlineSQLExecutor {
                         result.getInt("aircraftID"),
                         result.getInt("sourceAirportID"),
                         result.getInt("destAirportID"),
-                        result.getTimestamp("liftOffTime"),
+                        result.getTimestamp("departureTime"),
                         result.getTimestamp("departTime"),
-                        result.getTimestamp("landTime"),
+                        result.getTimestamp("arrivalTime"),
                         result.getTimestamp("arriveTime"),
                         false
                 ));
