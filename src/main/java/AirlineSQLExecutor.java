@@ -350,6 +350,50 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Return a list of all available flights which are not cancelled and not departed which have 
+     * the specified number of available seats in the specified seat class
+     * @param ticketClass the seat class
+     * @param seats the number of desired seats
+     * @return the list of qualifying flights
+     */
+    public ArrayList<Flight> getAvailableFlights(String ticketClass, int seats) {
+    	ArrayList<Flight> flights = new ArrayList<Flight>();
+    	
+    	final String query = "SELECT * FROM flights.flight f WHERE aircraftID IN (SELECT aircraftID FROM "
+    			+ "flights.aircraft WHERE firstClassSeats - (SELECT count(*) FROM flights.passenger WHERE reservationID "
+    			+ "IN (SELECT reservationID FROM flights.reservation WHERE flightID = f.flightID AND "
+    			+ "class='" + ticketClass +"')) >= "+seats+" ) AND cancelled = false "
+    			+ "AND f.flightID NOT IN (SELECT flightID from flights.FlightDeparted)";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			flights.add(new Flight(
+    					result.getInt("flightID"),
+    					result.getInt("aircraftID"),
+    					result.getInt("sourceAirportID"),
+    					result.getInt("destAirportID"),
+    					result.getTimestamp("departureTime"),
+    					result.getTimestamp("arrivalTime"),
+    					result.getBoolean("cancelled")
+				));
+    		}
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return flights;
+    }
+    
+    /**
      * Get a list of all flights that have departed, but are not yet landed
      * @return the set of flights that are currently in transit
      */
