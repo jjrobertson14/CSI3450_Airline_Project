@@ -1039,10 +1039,12 @@ public class AirlineSQLExecutor {
 
 
 
-            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,departureTime,arrivalTime FROM (\n"
-                    + "	SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM Flight "
-                    + "WHERE Flight.sourceAirportID = " + airportNo + " "
-                    + ") AS sub2\n";
+            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime,departTime,arriveTime FROM (\n"
+                    + "\tSELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime,departTime,arriveTime FROM Flight\n "
+                    + "\tJOIN FlightDeparted USING (flightID)\n"
+					+ "\tJOIN FlightArrived USING (flightID)\n"
+                    + "\tWHERE Flight.sourceAirportID = 9 #<airport number to check for>\n"
+                    + ") AS sub2";
             System.out.println(query);
 
             Statement statement = connection.createStatement();
