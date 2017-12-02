@@ -1119,4 +1119,58 @@ public class AirlineSQLExecutor {
 
         return flights;
     }
+
+    // • Get all flights whose arrival and departure times are on time/delayed.
+    // if onTime is false, then check for delayed flights
+    public ArrayList<Flight> getFlightsOnTimeOrDelayed(boolean onTime) {
+        ArrayList<Flight> flights = new ArrayList<Flight>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+            final String query;
+
+            if (onTime) {
+                query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight\n"
+                        + "\tJOIN FlightDeparted USING (flightID)\n"
+                        + "\tJOIN FlightArrived USING (flightID)\n"
+                        + "\tWHERE departTime <= departureTime AND arriveTime <= arrivalTime\n";
+            } else {
+                query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight\n"
+                        + "\tJOIN FlightDeparted USING (flightID)\n"
+                        + "\tJOIN FlightArrived USING (flightID)\n"
+                        + "\tWHERE departTime > departureTime OR arriveTime > arrivalTime\n";
+            }
+
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                flights.add(new Flight(
+                        result.getInt("flightID"),
+                        result.getInt("aircraftID"),
+                        result.getInt("sourceAirportID"),
+                        result.getInt("destAirportID"),
+                        result.getTimestamp("departureTime"),
+                        result.getTimestamp("departTime"),
+                        result.getTimestamp("arrivalTime"),
+                        result.getTimestamp("arriveTime"),
+                        false
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flights;
+    }
 }

@@ -105,6 +105,20 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flight rooster");
             dialog.show();
         });
+        getOnTimeFlightsButton.setOnAction(e -> {
+            ArrayList<Flight> resultList = executor.getFlightsOnTimeOrDelayed(true);
+
+            for(Flight curFlight : resultList) {
+                System.out.println("result : " + curFlight.getID());
+            }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flights on time");
+            dialog.show();
+        });
+
+
+
+
 
 
         // position buttons within the gridPane

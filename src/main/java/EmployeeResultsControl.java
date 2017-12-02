@@ -34,6 +34,10 @@ public class EmployeeResultsControl extends GridPane {
 
     private Label flightListLabel;
 
+    private Label flightsOnTimeLabel;
+
+    private Label flightsDelayedLabel;
+
     public EmployeeResultsControl(ArrayList resultList, int flightNum, int airportNum, String resultMode) {
         super();
         resultListData = resultList;
@@ -46,7 +50,9 @@ public class EmployeeResultsControl extends GridPane {
         passengerListLabel = new Label("Passengers of flight: \n ID, Name, DoB, isMember, needsWheelchair, needsOxygen");
         crewListLabel = new Label("Crew of flight: \n empID, prevFlightID, positionID, firstName, lastName");
         flightListLabel = new Label("Flights from airport: \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, arrivalTime, recordedDepartureTime, recordedArrivalTime");
-        flightRoosterLabel = new Label ("Flight rooster(roster): \n flightID, aircraftID, sourceAirportID, destAirportID, liftOffTime, departTime, landTime, arriveTime");
+        flightRoosterLabel = new Label ("Flight rooster(roster): \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, recorded departTime, arrivalTime, recorded arriveTime");
+        flightsOnTimeLabel = new Label ("Flights on time: \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, recorded departTime, arrivalTime, recorded arriveTime");
+        flightsDelayedLabel = new Label ("Flights that are delayed: \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, recorded departTime, arrivalTime, recorded arriveTime");
 
         switch (resultMode) {
             case "Passengers of flight" :
@@ -96,6 +102,26 @@ public class EmployeeResultsControl extends GridPane {
 
                 this.add(flightRoosterLabel, 0,0);
                 this.add(resultListView, 0, 1);
+                break;
+
+            case "Flights on time" :
+                // • Get all flights whose arrival and departure times are on time/delayed.
+                // Load flights here
+                ObservableList<String> observableListView5 = FXCollections.observableArrayList();
+                fillListFlightsSchedule(resultListData, observableListView5);
+                resultListView = new ListView<String>(observableListView5);
+
+                this.add(flightsOnTimeLabel, 0,0);
+                this.add(resultListView, 0, 1);
+                break;
+
+            case "Flights delayed" :
+                // • Get all flights whose arrival and departure times are on time/delayed.
+                // Load flights here
+                break;
+
+            case "Sales for flight" :
+                break;
 
             default :
                 System.out.println("That's not a resultMode value");
