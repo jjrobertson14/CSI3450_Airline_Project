@@ -216,8 +216,8 @@ public class AirlineSQLExecutor {
         return customers;
     }
 
-    //• Get all the details about the crew members on that flight.
-    public ArrayList<Employee> getCrewOnFlight(int flightNo) {
+    // Get all the details about the crew members on that flight.
+    public ArrayList<Employee> getEmployeesOnFlight(int flightNo) {
         ArrayList<Employee> employees = new ArrayList<Employee>();
         System.out.println("Hit!");
 
