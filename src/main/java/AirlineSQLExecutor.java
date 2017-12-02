@@ -394,6 +394,48 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Get the set of all flights that have not yet departed on which the given customer is a passenger
+     * @param customerID the ID of the given customer
+     * @return
+     */
+    public ArrayList<Flight> getPendingFlights(int customerID) {
+    	ArrayList<Flight> flights = new ArrayList<Flight>();
+    	
+    	final String query = "SELECT * FROM flights.flight WHERE flightID NOT IN "
+    			+ "(SELECT flightID FROM flights.FlightDeparted) AND "
+    			+ "flightID IN (SELECT flightID FROM flights.Reservation "
+    			+ "WHERE reservationID IN (SELECT reservationID FROM flights.Passenger "
+    			+ "WHERE customerID=" + customerID+")) "
+				+ "AND cancelled=false";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while (result.next()) {
+    			flights.add(new Flight(
+    					result.getInt("flightID"),
+    					result.getInt("aircraftID"),
+    					result.getInt("sourceAirportID"),
+    					result.getInt("destAirportID"),
+    					result.getTimestamp("departureTime"),
+    					result.getTimestamp("arrivalTime"),
+    					result.getBoolean("cancelled")
+				));
+    		}
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return flights;
+    }
+    
+    /**
      * Get a list of all flights that have departed, but are not yet landed
      * @return the set of flights that are currently in transit
      */
@@ -1393,11 +1435,17 @@ public class AirlineSQLExecutor {
     	
     }
     
+    /**
+     * Apply the given cancellation fee (a percentage of ticket price) to 
+     * all the Charges associated with the reservationID
+     * @param reservationID the reservation ID 
+     * @param cancellationFee the scalar by which the cancellation fee will be calculated
+     */
     public void updateCancelledReservationCharges(int reservationID, double cancellationFee) {
     	
     	final String update = "UPDATE flights.Charge SET "
     			+ "refund=ticketPrice + insuranceFee + weightFee - memberDiscount - childDiscount "
-    			+ "- multiwayDiscount, cancellationFee=" + cancellationFee +" "
+    			+ "- multiwayDiscount, cancellationFee=" + cancellationFee +" * ticketPrice "
 				+ "WHERE reservationID=" + reservationID;
     	
     	try {
