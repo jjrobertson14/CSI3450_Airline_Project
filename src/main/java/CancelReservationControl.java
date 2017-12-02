@@ -13,31 +13,41 @@ import javafx.stage.*;
  */
 public class CancelReservationControl extends VBox {
 	
-	private ComboBox<String> flight;
+	AirlineSQLExecutor executor;
+	
+	private ComboBox<Reservation> reservation;
+	
+	private TextField cancellationDate;
 	
 	private Button cancel;
 	
-	public CancelReservationControl() {
+	public CancelReservationControl(Customer currentCustomer) {
 		super();
 		
-		// Load flights
-		ObservableList<String> flights = FXCollections.observableArrayList(
-			"Flight 1: Los Angeles -> Detroit",
-			"Flight 2: New York -> London",
-			"Flight 3: San Jose -> Mexico City"
-		);
+		executor = new AirlineSQLExecutor();
 		
-		flight = new ComboBox<String>(flights);
-		
-		//cancel button
+		reservation = new ComboBox<Reservation>();
+		cancellationDate = new TextField("2017-12-04");
 		cancel = new Button("Cancel");
+		
+		// load reservations
+		reservation.getItems().addAll(executor.getPendingReservations(currentCustomer.getID()));
+		
 		cancel.setOnAction( e -> {
-			// TODO: Deletion logic here
+			Reservation res = reservation.getValue();
+			
+			executor.cancelReservation(res.getID());
+			executor.dropPassengersOnReservation(res.getID());
+			executor.updateCancelledReservationCharges(res.getID(), .300);
 			
 			Stage stage = (Stage) this.getScene().getWindow();
 			stage.close();
 		});
 		
-		this.getChildren().addAll(flight, cancel);
+		this.getChildren().addAll(
+				reservation,
+				cancellationDate,
+				cancel
+		);
 	}
 }
