@@ -387,6 +387,32 @@ public class AirlineSQLExecutor {
     	return flights;
     }
     
+    
+    /**
+     * Synchronize the schedule of the given flight
+     * @param flight
+     */
+    public void updateFlightSchedule(Flight flight) {
+    	
+    	final String update = "UPDATE flights.Flight SET "
+    			+ "departureTime=Timestamp('" + flight.getDepartureTime() + "'), "
+    			+ "arrivalTime=Timestamp('" + flight.getArrivalTime() + "') "
+				+ "WHERE flightID=" + flight.getID();
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(update);
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
     /**
      * Marks the given flight as cancelled
      * @param flight the flight to be cancelled
@@ -409,6 +435,54 @@ public class AirlineSQLExecutor {
     	catch (SQLException e) {
     		e.printStackTrace();
     	}
+    }
+    
+    public ClassPrice getClassPrice(Flight flight) {
+    	ClassPrice price = null;
+    	
+    	final String query = "SElECT * FROM flights.ClassPrices WHERE "
+    			+ "flightID="+flight.getID();
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		price = new ClassPrice();
+    		price.setFlightID(flight.getID());
+    		
+    		while(result.next()) {
+    			
+    			double seatPrice = result.getDouble("price");
+    			
+    			switch (result.getString("class")) {
+    			case "first":
+    				price.setFirstClass(seatPrice);
+    				break;
+    			case "business":
+    				price.setBusinessClass(seatPrice);
+    				break;
+    			case "family":
+    				price.setFamilyClass(seatPrice);
+    				break;
+    			case "premium":
+    				price.setPremiumClass(seatPrice);
+    				break;
+    			case "economy":
+    				price.setEconClass(seatPrice);
+    				
+    			}
+    		}
+    		
+    		closeConnection();
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return price;
     }
     
     /**
@@ -525,11 +599,11 @@ public class AirlineSQLExecutor {
     }
     
     /**
-     * Get the employees who are currently working at the given airport
+     * Get the non-Pilot employees who are currently working at the given airport
      * @param airport the given airport
      * @return a list of assigned employees
      */
-    public ArrayList<Employee> getEmployeesAtAirport(Airport airport) {
+    public ArrayList<Employee> getCrewAtAirport(int airportID) {
     	ArrayList<Employee> employees = new ArrayList<Employee>();
     	
     	try {
@@ -537,7 +611,8 @@ public class AirlineSQLExecutor {
     		
     		final String query = "SELECT * FROM flights.Employee WHERE empID in "
     				+ "(SELECT empID FROM flights.AirportAssignment WHERE airportID="
-    				+ airport.getID() + ")";
+    				+ airportID + ") "
+    				+ "AND positionID <> 3";
     		
     		Statement statement = connection.createStatement();
     		
@@ -570,6 +645,15 @@ public class AirlineSQLExecutor {
      * @return a list of pilots at the given airport
      */
     public ArrayList<Employee> getPilotsAtAirport(Airport airport) {
+    	return getPilotsAtAirport(airport.getID());
+    }
+    
+    /**
+     * Return a list of pilots at the given Airport
+     * @param airportID the id of the given airport
+     * @return a list of pilots associated with the given airportID
+     */
+    public ArrayList<Employee> getPilotsAtAirport(int airportID) {
     	ArrayList<Employee> employees = new ArrayList<Employee>();
     	
     	try {
@@ -577,7 +661,7 @@ public class AirlineSQLExecutor {
     		
     		final String query = "SELECT * FROM flights.Employee WHERE empID in "
     				+ "(SELECT empID FROM flights.AirportAssignment WHERE airportID="
-    				+ airport.getID() + ") AND positionID in (SELECT positionID from "
+    				+ airportID + ") AND positionID in (SELECT positionID from "
     				+ "flights.EmployeePosition WHERE dressCode='Pilot uniform')";
     		
     		Statement statement = connection.createStatement();
@@ -662,6 +746,132 @@ public class AirlineSQLExecutor {
     		
     		statement.executeBatch();
     		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Get the set of all employees who are assigned to the given flight
+     * @param flight the given flight
+     * @return all employees who are assigned to the flight
+     */
+    public ArrayList<Employee> getCrewOnFlight(Flight flight) {
+    	ArrayList<Employee> employees = new ArrayList<Employee>();
+    	
+    	final String query = "SELECT * FROM flights.Employee WHERE "
+    			+ "empID IN (SELECT empID FROM flights.FlightAssignment "
+    			+ "WHERE flightID=" + flight.getID() + ") "
+				+ "AND positionID <> 3";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			employees.add(new Employee(
+    					result.getInt("empID"),
+    					result.getInt("prevFlightID"),
+    					result.getInt("positionID"),
+    					result.getString("firstName"),
+    					result.getString("lastName")
+				));
+    		}
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return employees;
+    }
+    
+    /**
+     * Get the designated pilot for the given flight
+     * @param flight the given flight
+     * @return the designated pilot for the given flight
+     */
+    public Employee getPilotOnFlight(Flight flight) {
+    	
+    	Employee pilot = null;
+    	
+    	final String query = "SELECT * FROM flights.Employee WHERE "
+    			+ "positionID=3 AND empID IN (SELECT empID from flights.FlightAssignment "
+    			+ "WHERE flightID="+flight.getID() +")";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		result.next();
+    		
+    		pilot = new Employee(
+					result.getInt("empID"),
+					result.getInt("prevFlightID"),
+					result.getInt("positionID"),
+					result.getString("firstName"),
+					result.getString("lastName")
+			);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return pilot;
+    	
+    }
+    
+    /**
+     * Remove all employees who have been previously assigned to the given flight
+     * @param flight the flight from which all assigned employees will be removed
+     */
+    public void dropAllEmployeesFromFlight(Flight flight) {
+    	
+    	final String delete = "DELETE FROM flights.FlightAssignment WHERE "
+    			+ "flightID=" + flight.getID();
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(delete);
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Drop all class prices associated with the given flight
+     * @param flightID the flight whose class prices will be deleted
+     */
+    public void dropAllClassPriceFromFlight(int flightID) {
+    	final String delete = "DELETE FROM flights.ClassPrices WHERE "
+    			+ "flightID=" + flightID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(delete);
+    		
     		closeConnection();
     	}
     	catch (SQLException e) {
