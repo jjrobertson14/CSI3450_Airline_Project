@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /**
  * This class generates dialogs for the employee tab
  * @author John
- *
+ * Date: November 29th, 2017
+ * Location: src/main/java
  */
 
 public class EmployeeDialog extends Stage {

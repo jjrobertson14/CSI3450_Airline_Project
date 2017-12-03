@@ -167,4 +167,3 @@ CREATE TABLE `Service` (
     ) not null,
     foreign key (aircraftID) references Aircraft(aircraftID)
 );
-

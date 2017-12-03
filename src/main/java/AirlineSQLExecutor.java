@@ -6,6 +6,10 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * Responsible for running SQL queries against the database.
+ * @author John
+ * @author Noah
+ * Date: November 25th, 2017
+ * Location: src/main/java
  */
 public class AirlineSQLExecutor {
 
@@ -1280,10 +1284,12 @@ public class AirlineSQLExecutor {
 
 
 
-            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,departureTime,arrivalTime FROM (\n"
-                    + "	SELECT flightID,aircraftID,destAirportID,sourceAirportID,liftOffTime,landTime FROM Flight "
-                    + "WHERE Flight.sourceAirportID = " + airportNo + " "
-                    + ") AS sub2\n";
+            final String query = "SELECT flightID,aircraftID,destAirportID,sourceAirportID,departureTime,arrivalTime,departTime,arriveTime FROM (\n"
+                    + "\tSELECT flightID,aircraftID,destAirportID,sourceAirportID,Flight.departureTime,Flight.arrivalTime,FlightDeparted.departTime,FlightArrived.arriveTime FROM Flight\n "
+                    + "\tJOIN FlightDeparted USING (flightID)\n"
+					+ "\tJOIN FlightArrived USING (flightID)\n"
+                    + "\tWHERE Flight.sourceAirportID = 9 #<airport number to check for>\n"
+                    + ") AS sub2";
             System.out.println(query);
 
             Statement statement = connection.createStatement();
@@ -1296,8 +1302,8 @@ public class AirlineSQLExecutor {
                         result.getInt("aircraftID"),
                         result.getInt("sourceAirportID"),
                         result.getInt("destAirportID"),
-                        result.getTimestamp("liftOffTime"),
-                        result.getTimestamp("landTime"),
+                        result.getTimestamp("departureTime"),
+                        result.getTimestamp("arrivalTime"),
                         false
                 ));
             }
@@ -1325,11 +1331,10 @@ public class AirlineSQLExecutor {
 
 
 
-            final String query = "SELECT flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM (\n"
-                    + "	SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,liftOffTime,departTime,landTime,arriveTime FROM Flight \n"
+            final String query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight \n"
                     + " JOIN FlightDeparted USING (flightID) "
-                    + " JOIN FlightArrived USING (flightID) "
-                    + ") AS sub3";
+                    + " JOIN FlightArrived USING (flightID) ";
+
             System.out.println(query);
 
             Statement statement = connection.createStatement();
@@ -1342,9 +1347,63 @@ public class AirlineSQLExecutor {
                         result.getInt("aircraftID"),
                         result.getInt("sourceAirportID"),
                         result.getInt("destAirportID"),
-                        result.getTimestamp("liftOffTime"),
+                        result.getTimestamp("departureTime"),
                         result.getTimestamp("departTime"),
-                        result.getTimestamp("landTime"),
+                        result.getTimestamp("arrivalTime"),
+                        result.getTimestamp("arriveTime"),
+                        false
+                ));
+            }
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flights;
+    }
+
+    // • Get all flights whose arrival and departure times are on time/delayed.
+    // if onTime is false, then check for delayed flights
+    public ArrayList<Flight> getFlightsOnTimeOrDelayed(boolean onTime) {
+        ArrayList<Flight> flights = new ArrayList<Flight>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+            final String query;
+
+            if (onTime) {
+                query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight\n"
+                        + "\tJOIN FlightDeparted USING (flightID)\n"
+                        + "\tJOIN FlightArrived USING (flightID)\n"
+                        + "\tWHERE departTime <= departureTime AND arriveTime <= arrivalTime\n";
+            } else {
+                query = "SELECT Flight.flightID,aircraftID,sourceAirportID,destAirportID,Flight.departureTime,FlightDeparted.departTime,Flight.arrivalTime,FlightArrived.arriveTime FROM Flight\n"
+                        + "\tJOIN FlightDeparted USING (flightID)\n"
+                        + "\tJOIN FlightArrived USING (flightID)\n"
+                        + "\tWHERE departTime > departureTime OR arriveTime > arrivalTime\n";
+            }
+
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                flights.add(new Flight(
+                        result.getInt("flightID"),
+                        result.getInt("aircraftID"),
+                        result.getInt("sourceAirportID"),
+                        result.getInt("destAirportID"),
+                        result.getTimestamp("departureTime"),
+                        result.getTimestamp("departTime"),
+                        result.getTimestamp("arrivalTime"),
                         result.getTimestamp("arriveTime"),
                         false
                 ));
@@ -1713,5 +1772,58 @@ public class AirlineSQLExecutor {
     		e.printStackTrace();
     	}
     }
-    
+
+    // • Calculate total sales for a given flight.
+    //array list will contain the total when it is returned
+    public ArrayList<java.math.BigDecimal> getFlightSales(int flightNo) {
+        ArrayList<java.math.BigDecimal> sum = new ArrayList<java.math.BigDecimal>();
+        System.out.println("Hit!");
+
+        try {
+            establishConnection();
+            Statement useFlights = connection.createStatement();
+            useFlights.executeQuery("USE Flights;");
+
+            final String query = "SELECT SUM(refund),SUM(ticketPrice),SUM(insuranceFee),SUM(weightFee),Reservation.cancelled FROM Flight\n"
+                    + "\tJOIN Reservation USING (flightID)\n"
+                    + "\tJOIN Charge USING (reservationID)\n"
+                    + "\tWHERE flightID = " + flightNo + "\n"
+                    + "GROUP BY Reservation.cancelled;";
+
+            System.out.println(query);
+
+            Statement statement = connection.createStatement();
+
+            //contains row for cancelled charges and row for non-cancelled charges
+            ResultSet result = statement.executeQuery(query);
+
+            java.math.BigDecimal refundSum = new java.math.BigDecimal(0);
+            java.math.BigDecimal ticketPriceSum =  new java.math.BigDecimal(0);
+            java.math.BigDecimal insuranceFeeSum = new java.math.BigDecimal(0);
+            java.math.BigDecimal weightFeeSum = new java.math.BigDecimal(0);
+            int cancelled = 0;
+
+            //iterates either once or twice depending on whether any reservations on the flight have been cancelled
+            while(result.next()) {
+                cancelled = result.getInt("cancelled");
+                if (cancelled == 1) {
+                    refundSum = refundSum.add(result.getBigDecimal("SUM(refund)"));
+                }
+                ticketPriceSum = ticketPriceSum.add(result.getBigDecimal("SUM(ticketPrice)"));
+                insuranceFeeSum = insuranceFeeSum.add(result.getBigDecimal("SUM(insuranceFee)"));
+                weightFeeSum = weightFeeSum.add(result.getBigDecimal("SUM(weightFee)"));
+            }
+
+            java.math.BigDecimal sumSingle = refundSum.negate().add(ticketPriceSum).add(insuranceFeeSum).add(weightFeeSum);
+            sum.add(sumSingle);
+
+            statement.close();
+
+            closeConnection();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sum;
+    }
 }

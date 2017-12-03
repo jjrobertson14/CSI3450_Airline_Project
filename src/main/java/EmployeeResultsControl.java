@@ -4,12 +4,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.ArrayList;
 
-//TODO: load passengerListData into passengerListView,  make column headers, control for this dialog popping up
-
 /**
  * This view will display the results of the actions done on the Employee tab
  * @author John
- *
+ * Date: November 28th, 2017
+ * Location: src/main/java
  */
 public class EmployeeResultsControl extends GridPane {
 //customerID,firstName,lastName,birthDate,member,wheelchair,oxygen
@@ -34,15 +33,25 @@ public class EmployeeResultsControl extends GridPane {
 
     private Label flightListLabel;
 
+    private Label flightsOnTimeLabel;
+
+    private Label flightsDelayedLabel;
+
     public EmployeeResultsControl(ArrayList resultList, int flightNum, int airportNum, String resultMode) {
         super();
         resultListData = resultList;
         flightNo = flightNum;
         airportNo = airportNum;
+
+        // Create labels
         flightLabel = new Label("Selected Flight: " + flightNo);
         airportLabel = new Label("Selected airport: " + airportNum);
-
-
+        passengerListLabel = new Label("Passengers of flight: \n ID, Name, DoB, isMember, needsWheelchair, needsOxygen");
+        crewListLabel = new Label("Crew of flight: \n empID, prevFlightID, positionID, firstName, lastName");
+        flightListLabel = new Label("Flights from airport: \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, arrivalTime, recordedDepartureTime, recordedArrivalTime");
+        flightRoosterLabel = new Label ("Flight rooster(roster): \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, recorded departTime, arrivalTime, recorded arriveTime");
+        flightsOnTimeLabel = new Label ("Flights on time: \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, recorded departTime, arrivalTime, recorded arriveTime");
+        flightsDelayedLabel = new Label ("Flights that are delayed: \n flightID, aircraftID, sourceAirportID, destAirportID, departureTime, recorded departTime, arrivalTime, recorded arriveTime");
 
         switch (resultMode) {
             case "Passengers of flight" :
@@ -51,9 +60,6 @@ public class EmployeeResultsControl extends GridPane {
                 ObservableList<String> observableListView1 = FXCollections.observableArrayList();
                 fillListViewPassengersOfFlight(resultListData, observableListView1);
                 resultListView = new ListView<String>(observableListView1);
-
-                // Create labels
-                passengerListLabel = new Label("Passengers of flight: \n ID, Name, DoB, isMember, needsWheelchair, needsOxygen");
 
                 // arrange UI elements
 
@@ -69,9 +75,6 @@ public class EmployeeResultsControl extends GridPane {
                 fillListViewCrewOfFlight(resultListData, observableListView2);
                 resultListView = new ListView<String>(observableListView2);
 
-                // Create labels
-                crewListLabel = new Label("Crew of flight: \n empID, prevFlightID, positionID, firstName, lastName");
-
                 this.add(flightLabel, 0, 0);
                 this.add(crewListLabel, 0, 1);
                 this.add(resultListView, 0, 2);
@@ -83,9 +86,6 @@ public class EmployeeResultsControl extends GridPane {
                 ObservableList<String> observableListView3 = FXCollections.observableArrayList();
                 fillListFlights(resultListData, observableListView3);
                 resultListView = new ListView<String>(observableListView3);
-
-                // Create labels
-                flightListLabel = new Label("Flights from airport: \n flightID, aircraftID, sourceAirportID, destAirportID, liftOffTime, landTime");
 
                 this.add(airportLabel, 0, 0);
                 this.add(flightListLabel, 0, 1);
@@ -99,11 +99,42 @@ public class EmployeeResultsControl extends GridPane {
                 fillListFlightsSchedule(resultListData, observableListView4);
                 resultListView = new ListView<String>(observableListView4);
 
-                //Create labels
-                flightRoosterLabel = new Label ("Flight rooster(roster): \n flightID, aircraftID, sourceAirportID, destAirportID, liftOffTime, departTime, landTime, arriveTime");
-
                 this.add(flightRoosterLabel, 0,0);
                 this.add(resultListView, 0, 1);
+                break;
+
+            case "Flights on time" :
+                // • Get all flights whose arrival and departure times are on time/delayed.
+                // Load flights here
+                ObservableList<String> observableListView5 = FXCollections.observableArrayList();
+                fillListFlightsSchedule(resultListData, observableListView5);
+                resultListView = new ListView<String>(observableListView5);
+
+                this.add(flightsOnTimeLabel, 0,0);
+                this.add(resultListView, 0, 1);
+                break;
+
+            case "Flights delayed" :
+                // • Get all flights whose arrival and departure times are on time/delayed.
+                // Load flights here
+                ObservableList<String> observableListView6 = FXCollections.observableArrayList();
+                fillListFlightsSchedule(resultListData, observableListView6);
+                resultListView = new ListView<String>(observableListView6);
+
+                this.add(flightsDelayedLabel, 0,0);
+                this.add(resultListView, 0, 1);
+                break;
+
+            case "Sales for flight" :
+                // • Calculate total sales for a given flight.
+                // Load total here
+                ObservableList<String> observableListView7 = FXCollections.observableArrayList();
+                loadTotalSales(resultListData, observableListView7);
+                resultListView = new ListView<String>(observableListView7);
+
+                this.add(flightLabel, 0, 0);
+                this.add(resultListView, 0, 1);
+                break;
 
             default :
                 System.out.println("That's not a resultMode value");
@@ -157,7 +188,9 @@ public class EmployeeResultsControl extends GridPane {
             curRow += curFlight.getSourceAirportID() + " ";
             curRow += curFlight.getDestAirportID() + " ";
             curRow += curFlight.getDepartureTime() + " ";
-            curRow += curFlight.getArrivalTime();
+            curRow += curFlight.getArrivalTime() + " ";
+            curRow += curFlight.getRecordedDepartureTime();
+            curRow += curFlight.getRecordedArrivalTime();
 
             System.out.println("adding flight to view: \n" + curRow + "\n");
 
@@ -182,6 +215,12 @@ public class EmployeeResultsControl extends GridPane {
             System.out.println("adding flight to view: \n" + curRow + "\n");
 
             observableListView.add(curRow);
+        }
+    }
+
+    private void loadTotalSales(ArrayList<java.math.BigDecimal> sum, ObservableList<String> observableListView) {
+        for (java.math.BigDecimal sumVal : sum) {
+            observableListView.add(sumVal.toString());
         }
     }
 

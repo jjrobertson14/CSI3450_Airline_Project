@@ -4,6 +4,8 @@
  * 
  * @author John
  * @author Noah
+ * Date: November 27th, 2017
+ * Location: src/main/java
  */
 public class Employee {
 

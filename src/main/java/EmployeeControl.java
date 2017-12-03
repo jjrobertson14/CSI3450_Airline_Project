@@ -8,7 +8,8 @@ import javafx.scene.layout.*;
 /**
  * This view is the root of the Employee tab
  * @author John
- *
+ * Date: November 28th, 2017
+ * Location: src/main/java
  */
 
 public class EmployeeControl extends GridPane {
@@ -38,6 +39,8 @@ public class EmployeeControl extends GridPane {
     Button calcTotalSalesButton;
     TextField flightTotalSalesTextField;
 
+    private int flightNoParam;
+
     public EmployeeControl() {
         super();
 
@@ -60,7 +63,7 @@ public class EmployeeControl extends GridPane {
 
         //button behavior
         getCustomersOnFlightButton.setOnAction(e -> {
-            int flightNoParam = Integer.valueOf(flightCustomersTextField.getText());
+            flightNoParam = Integer.valueOf(flightCustomersTextField.getText());
             System.out.println("flightNoParam is: " + flightNoParam);
             ArrayList<Customer> resultList = executor.getCustomersOnFlight(flightNoParam);
 
@@ -71,6 +74,7 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, flightNoParam, 0, "Passengers of flight");
             dialog.show();
         });
+
         getCrewOfFlightButton.setOnAction(e -> {
             int flightNoParam = Integer.valueOf(flightCrewTextField.getText());
             System.out.println("flightNoParam is: " + flightNoParam);
@@ -83,6 +87,7 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, flightNoParam, 0, "Crew of flight");
             dialog.show();
         });
+
         getFlightsForAirportButton.setOnAction(e -> {
             int airportNoParam = Integer.valueOf(airportFlightsTextField.getText());
             System.out.println("airportNoParam is: " + airportNoParam);
@@ -95,6 +100,7 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, 0, airportNoParam, "Flights from airport");
             dialog.show();
         });
+
         viewFlightRosterButton.setOnAction(e -> {
             ArrayList<Flight> resultList = executor.getFlightRooster();
 
@@ -105,6 +111,41 @@ public class EmployeeControl extends GridPane {
             EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flight rooster");
             dialog.show();
         });
+
+        getOnTimeFlightsButton.setOnAction(e -> {
+            ArrayList<Flight> resultList = executor.getFlightsOnTimeOrDelayed(true);
+
+            for(Flight curFlight : resultList) {
+                System.out.println("result : " + curFlight.getID());
+            }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flights on time");
+            dialog.show();
+        });
+
+        getDelayedFlightsButton.setOnAction(e -> {
+            ArrayList<Flight> resultList = executor.getFlightsOnTimeOrDelayed(false);
+
+            for(Flight curFlight : resultList) {
+                System.out.println("result : " + curFlight.getID());
+            }
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, 0, 0, "Flights delayed");
+            dialog.show();
+        });
+
+        calcTotalSalesButton.setOnAction(e -> {
+            flightNoParam = Integer.valueOf(flightTotalSalesTextField.getText());
+            System.out.println("flightNoParam is: " + flightNoParam);
+            ArrayList<java.math.BigDecimal> resultList = executor.getFlightSales(flightNoParam);
+
+            EmployeeDialog dialog = new EmployeeDialog(resultList, flightNoParam, 0, "Sales for flight");
+            dialog.show();
+        });
+
+
+
+
 
 
         // position buttons within the gridPane

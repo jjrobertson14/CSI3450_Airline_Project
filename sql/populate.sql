@@ -278,6 +278,7 @@ VALUES
 (2, Date('2017-12-02 16:35:00')),
 (3, Date('2017-12-03 06:57:11')),
 (4, Date('2017-12-04 011:50:11'));
+(5, Date('2017-12-05 14:00:00'));
 
 #populate class prices table
 INSERT INTO ClassPrices (class, flightID, price)
@@ -402,3 +403,20 @@ VALUES
 (8, 6, null, 125.00, 15.00, 12.50, 125.00),
 (9, 9, null, 100.00, 15.00, 10.00, 100.00),
 (10, 7, 00.15, 110.00, 15.00, 11.00, 110.00);
+
+#populate flight sequence table
+INSERT INTO FlightSequence (reservationID, flightID, sequenceNum)
+VALUES
+(1, 2, 1),
+(1, 3, 2),
+(1, 7, 3),
+(2, 5, 1),
+(2, 6, 2),
+(3, 6, 1),
+(3, 9, 2),
+(4, 10, 1),
+(4, 5, 2),
+(4, 2, 3),
+(5, 1, 1),
+(5, 9, 2),
+(5, 6, 3);
