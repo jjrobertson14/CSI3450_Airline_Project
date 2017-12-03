@@ -414,8 +414,28 @@ public class AirlineSQLExecutor {
     public ArrayList<Flight> getAvailableFlights(String ticketClass, int seats) {
     	ArrayList<Flight> flights = new ArrayList<Flight>();
     	
+    	String column = null;
+    	
+    	switch (ticketClass) {
+    	case "first":
+    		column="firstClassSeats";
+    		break;
+    	case "business":
+    		column="businessSeats";
+    		break;
+    	case "family":
+    		column="familySeats";
+    		break;
+    	case "premium":
+    		column="premiumSeats";
+    		break;
+    	case "economy":
+    		column="econSeats";
+    		break;
+    	}
+    	
     	final String query = "SELECT * FROM flights.flight f WHERE aircraftID IN (SELECT aircraftID FROM "
-    			+ "flights.aircraft WHERE firstClassSeats - (SELECT count(*) FROM flights.passenger WHERE reservationID "
+    			+ "flights.aircraft WHERE " + column + " - (SELECT count(*) FROM flights.passenger WHERE reservationID "
     			+ "IN (SELECT reservationID FROM flights.reservation WHERE flightID = f.flightID AND "
     			+ "class='" + ticketClass +"')) >= "+seats+" ) AND cancelled = false "
     			+ "AND f.flightID NOT IN (SELECT flightID from flights.FlightDeparted)";
