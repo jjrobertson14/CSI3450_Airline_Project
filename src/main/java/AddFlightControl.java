@@ -129,7 +129,7 @@ public class AddFlightControl extends GridPane {
 			pilot.getItems().clear();
 			
 			crew.getItems().addAll(executor.getAvailableCrewAtAirport(origin.getValue().getID()));
-			pilot.getItems().addAll(executor.getPilotsAtAirport(origin.getValue().getID()));
+			pilot.getItems().addAll(executor.getAvailablePilotsAtAirport(origin.getValue().getID()));
 		});
 		
 		// handle submitting the flight

@@ -938,6 +938,48 @@ public class AirlineSQLExecutor {
     	return employees;
     }
     
+    /**
+     * Return a list of pilots at the given Airport
+     * @param airportID the id of the given airport
+     * @return a list of pilots associated with the given airportID
+     */
+    public ArrayList<Employee> getAvailablePilotsAtAirport(int airportID) {
+    	ArrayList<Employee> pilots = new ArrayList<Employee>();
+    	
+    	try {
+    		establishConnection();
+    		
+    		final String query = "SELECT * FROM flights.Employee WHERE empID in "
+    				+ "(SELECT empID FROM flights.AirportAssignment WHERE airportID="
+    				+ airportID + ") AND positionID=3 AND empID NOT IN "
+					+ "(SELECT empID FROM flights.FlightAssignment WHERE flightID "
+					+ "NOT IN ( SELECT flightID FROM flights.FlightArrived))";
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			pilots.add(new Employee(
+    					result.getInt("empID"),
+    					result.getInt("prevFlightID"),
+    					result.getInt("positionID"),
+    					result.getString("firstName"),
+    					result.getString("lastName")
+				));
+    		}
+    		
+    		statement.close();
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return pilots;
+    }
+    
     
     /**
      * Get all employees at the given airport who aren't assigned to a flight

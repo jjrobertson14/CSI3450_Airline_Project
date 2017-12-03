@@ -137,7 +137,7 @@ public class EditFlightControl extends GridPane {
 			
 			// get pilot
 			pilot.getItems().clear();
-			pilot.getItems().addAll(executor.getPilotsAtAirport(f.getSourceAirportID()));
+			pilot.getItems().addAll(executor.getAvailablePilotsAtAirport(f.getSourceAirportID()));
 			pilot.setValue(executor.getPilotOnFlight(f.getID()));
 			
 			// get prices
