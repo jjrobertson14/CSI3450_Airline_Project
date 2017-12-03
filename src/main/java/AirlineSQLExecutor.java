@@ -583,6 +583,53 @@ public class AirlineSQLExecutor {
     }
     
     /**
+     * Drop all Passengers on this flight
+     * @param flightID the given flight
+     */
+    public void dropPassengersFromFlight(int flightID) {
+    	final String cancel = "DELETE FROM flights.Passenger "
+    			+ "WHERE reservationID IN (SELECT reservationID FROM flights.Reservation "
+    			+ "WHERE flightID=" + flightID+")";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(cancel);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Mark all reservations associated with the given flightID as cancelled
+     * @param flightID the given flightID
+     */
+    public void cancelFlightReservations(int flightID) {
+    	final String cancel = "UPDATE flights.Reservation SET cancelled = true "
+    			+ "WHERE flightID=" + flightID;
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(cancel);
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
      * Get the set of prices for each flight class
      * @param flightID the given flight
      * @return a PriceClass containing the prices for each class
@@ -787,6 +834,41 @@ public class AirlineSQLExecutor {
     	}
     	
     	return employees;
+    }
+    
+    public ArrayList<Employee> getAvailableCrewAtAirport(int airportID) {
+    	ArrayList<Employee> crew = new ArrayList<Employee>();
+    	
+    	final String query = "SELECT * FROM flights.Employee WHERE empID IN "
+    			+ "(SELECT empID FROM flights.AirportAssignment WHERE airportID="+airportID+") "
+				+ "AND positionID <> 3 AND empID NOT IN (SELECT empID FROM flights.FlightAssignment "
+				+ "WHERE flightID NOT IN ( SELECT flightID FROM flights.FlightArrived))";
+    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		ResultSet result = statement.executeQuery(query);
+    		
+    		while(result.next()) {
+    			crew.add(new Employee(
+    					result.getInt("empID"),
+    					result.getInt("prevFlightID"),
+    					result.getInt("positionID"),
+    					result.getString("firstName"),
+    					result.getString("lastName")
+				));
+    		}
+    		
+    		statement.close();
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return crew;
     }
     
     
@@ -1586,8 +1668,30 @@ public class AirlineSQLExecutor {
     	catch (SQLException e) {
     		e.printStackTrace();
     	}
+    }
+    
+    /**
+     * Apply refunds to all people who have a reservation on the given flight
+     * @param flightID the id of the given flight
+     */
+    public void updateCancelledFlightCharges(int flightID) {
+    	final String update = "UPDATE flights.Charge SET "
+    			+ "refund=ticketPrice + insuranceFee + weightFee - memberDiscount - childDiscount "
+    			+ "- multiwayDiscount WHERE reservationID IN (SELECT reservationID FROM flights.Reservation "
+    			+ "WHERE flightID=" + flightID + ")";
     	
-    	
+    	try {
+    		establishConnection();
+    		
+    		Statement statement = connection.createStatement();
+    		
+    		statement.executeUpdate(update);
+    		
+    		closeConnection();
+    	}
+    	catch (SQLException e) {
+    		e.printStackTrace();
+    	}
     }
     
 }
