@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 public class CreateReservationControl extends GridPane {
 	
@@ -207,6 +208,9 @@ public class CreateReservationControl extends GridPane {
 				}
 				
 				executor.insertCharge(charges);
+				
+				Stage stage = (Stage) submit.getParent().getScene().getWindow();
+				stage.close();
 				
 			}
 		});
