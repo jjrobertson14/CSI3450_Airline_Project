@@ -1,10 +1,7 @@
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javafx.collections.*;
-import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -12,6 +9,9 @@ import javafx.stage.Stage;
 
 /**
  * This view is responsible for creating a new flight
+ * Name: AddFlightControl.java
+ * Location src/main/java
+ * Date: November 28th 2017
  * @author Noah
  *
  */
@@ -128,8 +128,8 @@ public class AddFlightControl extends GridPane {
 			crew.getItems().clear();
 			pilot.getItems().clear();
 			
-			crew.getItems().addAll(executor.getCrewAtAirport(origin.getValue().getID()));
-			pilot.getItems().addAll(executor.getPilotsAtAirport(origin.getValue().getID()));
+			crew.getItems().addAll(executor.getAvailableCrewAtAirport(origin.getValue().getID()));
+			pilot.getItems().addAll(executor.getAvailablePilotsAtAirport(origin.getValue().getID()));
 		});
 		
 		// handle submitting the flight

@@ -1,11 +1,11 @@
 
 /**
  * This class is the java object mapping of Employee entities from the database
- * 
+ * Name: Employee.java
+ * Location: src/main/java
+ * Date: November 27th, 2017
  * @author John
  * @author Noah
- * Date: November 27th, 2017
- * Location: src/main/java
  */
 public class Employee {
 

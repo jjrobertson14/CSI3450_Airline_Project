@@ -7,7 +7,10 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 /**
- * This view allows the user to edit a particular flight
+ * This view allows the user to edit the details of a particular flght
+ * Name: EditFlightControl.java
+ * Location src/main/java
+ * Date: November 28th 2017
  * @author Noah
  *
  */
@@ -134,7 +137,7 @@ public class EditFlightControl extends GridPane {
 			
 			// get pilot
 			pilot.getItems().clear();
-			pilot.getItems().addAll(executor.getPilotsAtAirport(f.getSourceAirportID()));
+			pilot.getItems().addAll(executor.getAvailablePilotsAtAirport(f.getSourceAirportID()));
 			pilot.setValue(executor.getPilotOnFlight(f.getID()));
 			
 			// get prices

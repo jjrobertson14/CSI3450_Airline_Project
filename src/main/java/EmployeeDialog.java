@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 /**
  * This class generates dialogs for the employee tab
- * @author John
- * Date: November 29th, 2017
+ * Name: EmployeeDialog.java
  * Location: src/main/java
+ * Date: November 29th, 2017
+ * @author John
  */
 
 public class EmployeeDialog extends Stage {

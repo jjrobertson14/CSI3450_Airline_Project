@@ -3,7 +3,10 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 /**
- * The UI Dialog for creating a new Airport in the "Admin" tab
+ * The UI for creating a new airport in the 'Admin' tab
+ * Name: AirportControl.java
+ * Location src/main/java
+ * Date: November 28th 2017
  * @author Noah
  *
  */

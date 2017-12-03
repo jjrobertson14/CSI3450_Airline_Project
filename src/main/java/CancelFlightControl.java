@@ -4,10 +4,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-//TODO: Implement Flight type with the ComboBox 
 
 /**
- * This view allows the user to select and delete a flight
+ * This datatype represents an entry in the Aircraft table
+ * Name: CancelFlightControl.java
+ * Location src/main/java
+ * Date: November 28th 2017
  * @author Noah
  *
  */
@@ -32,6 +34,10 @@ public class CancelFlightControl extends VBox {
 		cancel = new Button("Cancel");
 		cancel.setOnAction( e -> {
 			executor.cancelFlight(flight.getValue().getID());
+			executor.updateCancelledFlightCharges(flight.getValue().getID());
+			executor.cancelFlightReservations(flight.getValue().getID());
+			executor.dropPassengersFromFlight(flight.getValue().getID());
+			executor.dropAllEmployeesFromFlight(flight.getValue().getID());
 			Stage stage = (Stage) this.getScene().getWindow();
 			stage.close();
 		});

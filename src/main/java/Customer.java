@@ -2,6 +2,14 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Random;
 
+/**
+ * This class is the java object mapping of Customer entities from the database
+ * Name: Customer.java
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class Customer {
 
     private static String[] firstNames = {
@@ -180,12 +188,7 @@ public class Customer {
     
     @Override
     public String toString() {
-    	String res = firstName + " " + lastName;
-    	
-    	if (isMember) {
-    		res += " : Member";
-    	}
-    	
+    	String res = "Customer " + id + ": " + firstName + " " + lastName;
     	return res;
     }
 

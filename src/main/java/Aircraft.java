@@ -1,5 +1,13 @@
 import java.util.Random;
 
+/**
+ * This class is the java object mapping of Aircraft entities from the database
+ * Name: Aircraft.java
+ * Location src/main/java
+ * Date: November 24th 2017
+ * @author Noah
+ *
+ */
 public class Aircraft {
     
 	private int id;

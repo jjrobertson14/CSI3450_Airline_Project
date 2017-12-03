@@ -1,5 +1,9 @@
 /**
- * Represents a pricing scheme for a particular flight
+ * This datatype represents a pricing scheme for a particular flight
+ * It corresponds to the ClassPrices table in the database
+ * Name: ClassPrice.java
+ * Location src/main/java
+ * Date: November 30th 2017
  * @author Noah
  *
  */
