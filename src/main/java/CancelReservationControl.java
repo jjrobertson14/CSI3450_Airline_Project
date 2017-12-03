@@ -1,10 +1,12 @@
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javafx.collections.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
-
-//TODO: Implement Flight type with the ComboBox 
 
 /**
  * This view allows the user to select and delete a flight
@@ -13,31 +15,66 @@ import javafx.stage.*;
  */
 public class CancelReservationControl extends VBox {
 	
-	private ComboBox<String> flight;
+	AirlineSQLExecutor executor;
+	
+	private ComboBox<Reservation> reservation;
+	
+	private TextField cancellationDate;
 	
 	private Button cancel;
 	
-	public CancelReservationControl() {
+	public CancelReservationControl(Customer currentCustomer) {
 		super();
 		
-		// Load flights
-		ObservableList<String> flights = FXCollections.observableArrayList(
-			"Flight 1: Los Angeles -> Detroit",
-			"Flight 2: New York -> London",
-			"Flight 3: San Jose -> Mexico City"
-		);
+		executor = new AirlineSQLExecutor();
 		
-		flight = new ComboBox<String>(flights);
-		
-		//cancel button
+		reservation = new ComboBox<Reservation>();
+		cancellationDate = new TextField("2017-12-04 12:00");
 		cancel = new Button("Cancel");
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
+		// load reservations
+		reservation.getItems().addAll(executor.getPendingReservations(currentCustomer.getID()));
+		
 		cancel.setOnAction( e -> {
-			// TODO: Deletion logic here
+			// get the reservation
+			Reservation res = reservation.getValue();
+			
+			// cancel reservation and drop customers
+			executor.cancelReservation(res.getID());
+			executor.dropPassengersOnReservation(res.getID());
+			
+			// determine fees
+			double feePercentage = .10;
+			
+			Flight resFlight = executor.getFlightByID(res.getFlightID());
+			Timestamp depart = resFlight.getDepartureTime();
+			Timestamp cancelTime = null;
+			
+			try {
+				cancelTime = new Timestamp(sdf.parse(cancellationDate.getText()).getTime());
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+				return;
+			}
+			
+			if (depart.getTime() - cancelTime.getTime() < 10 * 60 * 60 * 1000 ) {
+				feePercentage = .33;
+				System.out.println("Cancelled within 10 hours -> 33% fee");
+			}
+			
+						
+			executor.updateCancelledReservationCharges(res.getID(), feePercentage);
 			
 			Stage stage = (Stage) this.getScene().getWindow();
 			stage.close();
 		});
 		
-		this.getChildren().addAll(flight, cancel);
+		this.getChildren().addAll(
+				reservation,
+				cancellationDate,
+				cancel
+		);
 	}
 }

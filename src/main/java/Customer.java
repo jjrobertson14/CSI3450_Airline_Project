@@ -180,12 +180,7 @@ public class Customer {
     
     @Override
     public String toString() {
-    	String res = firstName + " " + lastName;
-    	
-    	if (isMember) {
-    		res += " : Member";
-    	}
-    	
+    	String res = "Customer " + id + ": " + firstName + " " + lastName;
     	return res;
     }
 

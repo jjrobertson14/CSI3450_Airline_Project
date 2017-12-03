@@ -76,10 +76,10 @@ VALUES
 (null, 1, 'Gary', 'Romero'),
 (null, 3, 'Adam', 'Mitchell'),
 (null, 3, 'Martha', 'Croswell'),
-(null, 4, 'Steve', 'Gregg'),
+(null, 3, 'Steve', 'Gregg'),
 (null, 4, 'Mark', 'Kelly'),
 #randomly generated
-(null, 2, 'Orville', 'Jeffry'),
+(null, 3, 'Orville', 'Jeffry'),
 (null, 3, 'Reatha', 'Yousef'),
 (null, 4, 'Willard', 'Howard'),
 (null, 4, 'Kym', 'Willard'),
@@ -122,10 +122,10 @@ VALUES
 (null, 1, 'Xi', 'Sanda'),
 (null, 1, 'Kym', 'Frank'),
 (null, 3, 'Jeffry', 'Orville'),
-(null, 4, 'William', 'Mohammed'),
+(null, 3, 'William', 'Mohammed'),
 (null, 1, 'Corrina', 'William'),
 (null, 1, 'Ali', 'Ike'),
-(null, 1, 'William', 'Orville'),
+(null, 3, 'William', 'Orville'),
 (null, 3, 'In', 'William'),
 (null, 1, 'Harriet', 'Adele'),
 (null, 2, 'Sherrie', 'Riva'),
@@ -256,7 +256,11 @@ VALUES
 (7, 5),
 (8, 6),
 (9, 7),
-(10, 8);
+(10, 8),
+(6, 50),
+(7, 12),
+(8, 71);
+
 
 #populate flight departed table
 INSERT INTO FlightDeparted (flightID, departTime)
