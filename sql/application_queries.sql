@@ -120,7 +120,10 @@ airportID  ) AND positionID in (SELECT positionID from
 flights.EmployeePosition WHERE dressCode='Pilot uniform')
 
 #Get available pilots at airport
-
+SELECT * FROM flights.Employee WHERE empID in 
+(SELECT empID FROM flights.AirportAssignment WHERE airportID=airportID  ) 
+AND positionID=3 AND empID NOT IN (SELECT empID FROM flights.FlightAssignment
+WHERE flightID NOT IN ( SELECT flightID FROM flights.FlightArrived))
 
 #Assign employees from a flight to an airport
 UPDATE flights.airportassignment SET airportID = airportID   
