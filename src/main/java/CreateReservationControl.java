@@ -190,6 +190,9 @@ public class CreateReservationControl extends GridPane {
 						childDiscount = 15;
 						System.out.println(birthDate);
 					}
+					else {
+						childDiscount = 0;
+					}
 					
 					Charge charge = new Charge(
 							reservationID,
