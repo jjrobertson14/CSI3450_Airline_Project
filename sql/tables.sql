@@ -1,4 +1,5 @@
 #Create database "flights"
+#Name: tables.sql
 #Location: sql/
 #Date: November 27th, 2017
 

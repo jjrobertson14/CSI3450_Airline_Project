@@ -1,4 +1,5 @@
 #Load demo values into the database "flights"
+#Name: populate.sql
 #Location: sql\
 #Date: November 27th, 2017
 
