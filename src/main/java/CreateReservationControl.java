@@ -1,7 +1,6 @@
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
