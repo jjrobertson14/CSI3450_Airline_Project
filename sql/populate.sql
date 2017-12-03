@@ -1,3 +1,7 @@
+#Load demo values into the database "flights"
+#Location: sql\
+#Date: November 27th, 2017
+
 #populate customer table
 INSERT INTO Customer (firstName, lastName, birthDate, member, wheelchair, oxygen)
 VALUES

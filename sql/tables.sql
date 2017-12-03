@@ -1,3 +1,7 @@
+#Create database "flights"
+#Location: sql/
+#Date: November 27th, 2017
+
 CREATE DATABASE flights; 
 
 use flights;
