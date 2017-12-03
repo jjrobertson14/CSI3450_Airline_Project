@@ -1,4 +1,6 @@
 #A collection of 'non-trivial' queries taken from src/main/java/AirlineSQLExecutor.java
+#These queries may not be suitable for execution independently, as many are intended to 
+#be executed in conjunction with related queries
 #Name: application_queries.java
 #Location: sql/
 #Date: Dec 1st, 2017
