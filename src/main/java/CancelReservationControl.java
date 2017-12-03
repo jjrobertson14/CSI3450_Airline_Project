@@ -29,7 +29,7 @@ public class CancelReservationControl extends VBox {
 		executor = new AirlineSQLExecutor();
 		
 		reservation = new ComboBox<Reservation>();
-		cancellationDate = new TextField("2017-12-04 12:00:00");
+		cancellationDate = new TextField("2017-12-04 12:00");
 		cancel = new Button("Cancel");
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
