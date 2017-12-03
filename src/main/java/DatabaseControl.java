@@ -75,8 +75,8 @@ public class DatabaseControl extends GridPane {
         this.add(populateCustomerButton, 1, 0);
         this.add(populateAirportButton, 1, 1);
         this.add(populateAircraftButton, 1, 2);
-        this.add(populateFlightButton, 1, 3);
-        this.add(populateEmployeeButton, 1, 4);
+        // this.add(populateFlightButton, 1, 3);
+        // this.add(populateEmployeeButton, 1, 4);
     }
 
 }
