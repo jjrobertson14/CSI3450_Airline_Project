@@ -1,6 +1,13 @@
 import javafx.scene.*;
 import javafx.stage.*;
 
+/**
+ * This dialog presents controls for creating and cancelling a reservation
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class ReservationDialog extends Stage {
 
 	public static final int CREATE_RESERVATION = 0;

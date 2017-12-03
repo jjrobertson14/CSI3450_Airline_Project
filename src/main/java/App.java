@@ -3,6 +3,13 @@ import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
+/**
+ * This is the main class of the application. It defines the root UI elements
+ * Location src/main/java
+ * Date: November 23th 2017
+ * @author Noah
+ *
+ */
 public class App extends Application {
 
     // the main scene displayed by the primaryStage

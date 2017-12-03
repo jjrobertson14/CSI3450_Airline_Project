@@ -1,6 +1,13 @@
 import javafx.scene.*;
 import javafx.stage.Stage;
 
+/**
+ * This dialog presents controls for adding and editing flights
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class FlightDialog extends Stage {
 	
 	public static final int ADD_FLIGHT = 0;

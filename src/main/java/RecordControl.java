@@ -7,6 +7,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+/**
+ * This view is responsible for recording flight arrivals and departures
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class RecordControl extends VBox {
 	
 	public static final int DEPARTURE_MODE = 0;

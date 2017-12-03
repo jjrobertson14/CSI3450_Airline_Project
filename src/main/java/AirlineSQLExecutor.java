@@ -5,11 +5,11 @@ import java.sql.*;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
- * Responsible for running SQL queries against the database.
+ * This class is responsible for running SQL queries against the database.
+ * Date: November 23th, 2017
+ * Location: src/main/java
  * @author John
  * @author Noah
- * Date: November 25th, 2017
- * Location: src/main/java
  */
 public class AirlineSQLExecutor {
 

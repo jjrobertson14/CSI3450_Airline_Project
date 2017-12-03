@@ -1,5 +1,13 @@
 import javafx.scene.control.*;
 
+/**
+ * This node establishes the main tabs of the UI and initializes their
+ * respective contents
+ * Location src/main/java
+ * Date: November 23th 2017
+ * @author Noah
+ *
+ */
 public class AirlineTabPane extends TabPane {
 
     private Tab customerTab;

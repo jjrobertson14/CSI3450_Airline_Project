@@ -1,6 +1,8 @@
 
 /**
- * Represents a charge for a passenger on a reservation
+ * This class is the java object mapping of Charge entities from the database
+ * Location src/main/java
+ * Date: November 28th 2017
  * @author Noah
  *
  */

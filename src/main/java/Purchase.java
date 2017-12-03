@@ -1,5 +1,12 @@
 import java.sql.*;
 
+/**
+ * This class is the java object mapping of Purchase entities from the database
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class Purchase {
 	
 	private int reservationID;

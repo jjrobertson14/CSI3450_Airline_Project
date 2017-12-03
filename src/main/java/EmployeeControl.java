@@ -7,9 +7,9 @@ import javafx.scene.layout.*;
 
 /**
  * This view is the root of the Employee tab
- * @author John
- * Date: November 28th, 2017
  * Location: src/main/java
+ * Date: November 28th, 2017
+ * @author John
  */
 
 public class EmployeeControl extends GridPane {

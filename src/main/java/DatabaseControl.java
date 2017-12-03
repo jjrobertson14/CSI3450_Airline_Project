@@ -3,6 +3,13 @@ import java.util.Calendar;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+/**
+ * This view presents some 'quick-n-dirty' database testing options
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class DatabaseControl extends GridPane {
 
     AirlineSQLExecutor executor;

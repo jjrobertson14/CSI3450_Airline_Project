@@ -4,6 +4,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 
+/**
+ * This view allows the user to manipulate Customer entries
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class CustomerControl extends VBox {
 	
 	private AirlineSQLExecutor executor;

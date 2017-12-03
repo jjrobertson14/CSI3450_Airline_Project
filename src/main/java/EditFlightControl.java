@@ -7,7 +7,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 /**
- * This view allows the user to edit a particular flight
+ * This view allows the user to edit the details of a particular flght
+ * Location src/main/java
+ * Date: November 28th 2017
  * @author Noah
  *
  */

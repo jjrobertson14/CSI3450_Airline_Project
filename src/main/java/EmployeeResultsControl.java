@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 /**
  * This view will display the results of the actions done on the Employee tab
- * @author John
- * Date: November 28th, 2017
  * Location: src/main/java
+ * Date: November 28th, 2017
+ * @author John
  */
 public class EmployeeResultsControl extends GridPane {
 //customerID,firstName,lastName,birthDate,member,wheelchair,oxygen

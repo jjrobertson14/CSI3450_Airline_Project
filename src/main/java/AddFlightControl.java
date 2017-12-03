@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 /**
  * This view is responsible for creating a new flight
+ * Location src/main/java
+ * Date: November 28th 2017
  * @author Noah
  *
  */

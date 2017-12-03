@@ -9,7 +9,9 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 
 /**
- * This view allows the user to select and delete a flight
+ * This view allows the user to select and cancel a particular reservation
+ * Location src/main/java
+ * Date: November 30th 2017
  * @author Noah
  *
  */

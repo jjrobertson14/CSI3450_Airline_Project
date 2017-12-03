@@ -1,6 +1,13 @@
 import javafx.scene.*;
 import javafx.stage.*;
 
+/**
+ * Defines a dialog for hosting an AirportControl
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class AirportDialog extends Stage {
 	
 	AirportControl airportControl;

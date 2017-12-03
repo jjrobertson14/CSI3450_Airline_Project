@@ -2,6 +2,13 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Random;
 
+/**
+ * This class is the java object mapping of Customer entities from the database
+ * Location src/main/java
+ * Date: November 28th 2017
+ * @author Noah
+ *
+ */
 public class Customer {
 
     private static String[] firstNames = {
