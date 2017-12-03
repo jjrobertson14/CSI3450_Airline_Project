@@ -2,6 +2,7 @@ import java.sql.*;
 
 /**
  * This class is the java object mapping of Flight entities from the database
+ * Name: Flight.java
  * Location: src/main/java
  * Date: November 24th, 2017
  * @author Noah

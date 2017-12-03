@@ -6,8 +6,9 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * This class is responsible for running SQL queries against the database.
- * Date: November 23th, 2017
+ * Name: AirlineSQLExecutor
  * Location: src/main/java
+ * Date: November 23th, 2017
  * @author John
  * @author Noah
  */

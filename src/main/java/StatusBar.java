@@ -4,6 +4,7 @@ import javafx.scene.layout.*;
 
 /**
  * This UI element is responsible for indicating connectivity with the databases
+ * Name: StatusBar.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

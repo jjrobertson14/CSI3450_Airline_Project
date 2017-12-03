@@ -2,6 +2,7 @@ import java.sql.*;
 
 /**
  * This class is the java object mapping of Purchase entities from the database
+ * Name: Purchase.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

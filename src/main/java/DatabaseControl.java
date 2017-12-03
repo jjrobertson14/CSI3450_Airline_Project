@@ -5,6 +5,7 @@ import javafx.scene.layout.*;
 
 /**
  * This view presents some 'quick-n-dirty' database testing options
+ * Name: DatabaseControl.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

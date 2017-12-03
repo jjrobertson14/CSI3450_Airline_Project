@@ -3,6 +3,7 @@ import javafx.stage.*;
 
 /**
  * This dialog presents controls for creating and cancelling a reservation
+ * Name: ReservationDialog.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

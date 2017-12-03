@@ -3,6 +3,7 @@ import javafx.scene.layout.*;
 
 /**
  * This view presents the various controls in the 'Admin' tab
+ * Name: AdminControl.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

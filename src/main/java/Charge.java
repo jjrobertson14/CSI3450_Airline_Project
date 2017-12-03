@@ -1,6 +1,7 @@
 
 /**
  * This class is the java object mapping of Charge entities from the database
+ * Name: Charge.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

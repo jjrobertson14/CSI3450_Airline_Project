@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 /**
  * This view allows the user to schedule a new reservation
+ * Name: CreateReservationControl.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

@@ -1,7 +1,8 @@
 /**
  * This class is the java object mapping of Airport entities from the database
- * Date: November 24th, 2017
+ * Name: Airport.java
  * Location: src/main/java
+ * Date: November 24th, 2017
  * @author John
  * @author Noah
  */

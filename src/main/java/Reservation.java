@@ -1,5 +1,6 @@
 /**
  * This class is the java object mapping of Reservation entities from the database
+ * Name: Reservation.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

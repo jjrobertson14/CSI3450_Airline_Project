@@ -6,7 +6,8 @@ import javafx.stage.*;
 
 
 /**
- * This view allows the user to select and delete a flight
+ * This datatype represents an entry in the Aircraft table
+ * Name: CancelFlightControl.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

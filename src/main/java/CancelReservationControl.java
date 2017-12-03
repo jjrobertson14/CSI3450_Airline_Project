@@ -10,6 +10,7 @@ import javafx.stage.*;
 
 /**
  * This view allows the user to select and cancel a particular reservation
+ * Name: CancelReservationControl.java
  * Location src/main/java
  * Date: November 30th 2017
  * @author Noah

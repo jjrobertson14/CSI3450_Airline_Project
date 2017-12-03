@@ -6,6 +6,7 @@ import javafx.scene.text.*;
 
 /**
  * This view allows the user to manipulate Customer entries
+ * Name: CustomerControl.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

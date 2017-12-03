@@ -4,6 +4,7 @@ import javafx.stage.Stage;
 
 /**
  * The UI for creating a new airport in the 'Admin' tab
+ * Name: AirportControl.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

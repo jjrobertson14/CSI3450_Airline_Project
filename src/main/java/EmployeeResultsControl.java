@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * This view will display the results of the actions done on the Employee tab
+ * Name: EmployeeResultsControl.java
  * Location: src/main/java
  * Date: November 28th, 2017
  * @author John

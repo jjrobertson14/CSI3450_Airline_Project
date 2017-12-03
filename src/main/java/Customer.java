@@ -4,6 +4,7 @@ import java.util.Random;
 
 /**
  * This class is the java object mapping of Customer entities from the database
+ * Name: Customer.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

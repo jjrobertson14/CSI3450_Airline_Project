@@ -3,6 +3,7 @@ import javafx.stage.*;
 
 /**
  * Defines a dialog for hosting an AirportControl
+ * Name: AirportDialog.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah

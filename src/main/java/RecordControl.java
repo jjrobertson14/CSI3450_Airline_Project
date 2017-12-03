@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 /**
  * This view is responsible for recording flight arrivals and departures
+ * Name: RecordControl.java
  * Location src/main/java
  * Date: November 28th 2017
  * @author Noah
